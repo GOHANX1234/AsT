@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ResellerLayout from "@/layouts/reseller-layout";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -141,10 +141,16 @@ export default function ResellerGenerate() {
 
   return (
     <ResellerLayout>
-      <h2 className="text-2xl font-semibold mb-6">Generate New Keys</h2>
+      <div className="space-y-2 mb-6">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">Generate New Keys</h2>
+        <p className="text-muted-foreground text-sm">Create license keys for your customers</p>
+      </div>
       
-      <Card>
-        <CardContent className="pt-6">
+      <Card className="border border-purple-500/20 shadow-lg shadow-purple-500/5 overflow-hidden">
+        <CardHeader className="px-6 py-4 border-b border-border bg-gradient-to-r from-purple-900/20 to-indigo-900/20">
+          <CardTitle className="text-base font-medium bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">Key Generation</CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 sm:p-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField

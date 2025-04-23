@@ -30,7 +30,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { formatDate, getStatusColor } from "@/lib/utils";
-import { Search, Eye, Trash2 } from "lucide-react";
+import { Search, Eye, Trash2, Gamepad2, Calendar, CalendarClock, Smartphone } from "lucide-react";
 
 export default function ResellerKeys() {
   const { toast } = useToast();
@@ -104,40 +104,46 @@ export default function ResellerKeys() {
 
   return (
     <ResellerLayout>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold">Manage Keys</h2>
-        <div className="flex items-center space-x-2">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input
-              type="text"
-              placeholder="Search keys..."
-              className="pl-9 pr-4 py-2"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <Select
-            value={gameFilter}
-            onValueChange={setGameFilter}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="All Games" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Games</SelectItem>
-              <SelectItem value="PUBG MOBILE">PUBG MOBILE</SelectItem>
-              <SelectItem value="LAST ISLAND OF SURVIVAL">LAST ISLAND OF SURVIVAL</SelectItem>
-              <SelectItem value="STANDOFF2">STANDOFF2</SelectItem>
-            </SelectContent>
-          </Select>
+      <div className="space-y-2 mb-4">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">Manage Keys</h2>
+        <p className="text-muted-foreground text-sm">View and revoke your license keys</p>
+      </div>
+      
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+          <Input
+            type="text"
+            placeholder="Search keys..."
+            className="pl-9 pr-4 py-2 bg-background border-border"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
+        <Select
+          value={gameFilter}
+          onValueChange={setGameFilter}
+        >
+          <SelectTrigger className="w-full sm:w-[180px] bg-background border-border">
+            <SelectValue placeholder="All Games" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Games</SelectItem>
+            <SelectItem value="PUBG MOBILE">PUBG MOBILE</SelectItem>
+            <SelectItem value="LAST ISLAND OF SURVIVAL">LAST ISLAND OF SURVIVAL</SelectItem>
+            <SelectItem value="STANDOFF2">STANDOFF2</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
-      <Card className="overflow-hidden">
+      {/* Desktop View */}
+      <Card className="overflow-hidden border border-purple-500/20 shadow-lg shadow-purple-500/5 hidden md:block">
+        <CardHeader className="px-6 py-4 border-b border-border bg-gradient-to-r from-purple-900/20 to-indigo-900/20">
+          <CardTitle className="text-base font-medium bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">Your License Keys</CardTitle>
+        </CardHeader>
         <CardContent className="p-0">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+            <table className="min-w-full divide-y divide-border">
               <thead className="bg-muted/50">
                 <tr>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
@@ -163,41 +169,43 @@ export default function ResellerKeys() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-border">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={7} className="px-6 py-4 text-center text-sm text-gray-500">
-                      Loading keys...
+                    <td colSpan={7} className="px-6 py-4 text-center text-sm text-muted-foreground">
+                      <div className="flex justify-center">
+                        <div className="animate-spin h-5 w-5 border-t-2 border-purple-500 rounded-full"></div>
+                      </div>
                     </td>
                   </tr>
                 ) : filteredKeys && filteredKeys.length > 0 ? (
                   filteredKeys.map((key) => {
                     const statusColor = getStatusColor(key.status);
                     return (
-                      <tr key={key.id}>
+                      <tr key={key.id} className="hover:bg-muted/30">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-mono text-gray-900">
+                          <div className="text-sm font-mono bg-muted/30 p-1.5 rounded">
                             {key.keyString.length > 20 
                               ? `${key.keyString.substring(0, 20)}...` 
                               : key.keyString}
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                           {key.game}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                           {formatDate(key.createdAt)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                           {formatDate(key.expiryDate)}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                           {key.devices}/{key.deviceLimit}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <Badge 
                             variant="outline"
-                            className={`${statusColor.bg} ${statusColor.text} border-none`}
+                            className={`${statusColor.bg} ${statusColor.text} border-${statusColor.border}`}
                           >
                             {key.status}
                           </Badge>
@@ -206,8 +214,8 @@ export default function ResellerKeys() {
                           <div className="flex space-x-2">
                             <Button
                               size="sm"
-                              variant="ghost"
-                              className="text-primary hover:text-primary/90"
+                              variant="outline"
+                              className="border-blue-500/20 bg-blue-900/10 text-blue-500 hover:bg-blue-900/20"
                               onClick={() => handleViewKey(key.id)}
                             >
                               <Eye className="h-4 w-4 mr-1" /> View
@@ -215,8 +223,8 @@ export default function ResellerKeys() {
                             {key.status === "ACTIVE" && (
                               <Button
                                 size="sm"
-                                variant="ghost"
-                                className="text-red-600 hover:text-red-900"
+                                variant="outline"
+                                className="border-red-500/20 bg-red-900/10 text-red-500 hover:bg-red-900/20"
                                 onClick={() => handleRevokeKey(key.id)}
                               >
                                 <Trash2 className="h-4 w-4 mr-1" /> Revoke
@@ -229,7 +237,7 @@ export default function ResellerKeys() {
                   })
                 ) : (
                   <tr>
-                    <td colSpan={7} className="px-6 py-4 text-center text-sm text-gray-500">
+                    <td colSpan={7} className="px-6 py-4 text-center text-sm text-muted-foreground">
                       No keys found. {searchTerm || gameFilter !== "all" ? "Try changing your search filters." : ""}
                     </td>
                   </tr>
@@ -239,6 +247,89 @@ export default function ResellerKeys() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Mobile View */}
+      <div className="md:hidden space-y-4">
+        {isLoading ? (
+          <div className="py-8 text-center">
+            <div className="animate-spin h-8 w-8 border-t-2 border-purple-500 rounded-full mx-auto"></div>
+            <p className="mt-3 text-muted-foreground">Loading keys...</p>
+          </div>
+        ) : filteredKeys && filteredKeys.length > 0 ? (
+          filteredKeys.map((key) => {
+            const statusColor = getStatusColor(key.status);
+            return (
+              <Card key={key.id} className="overflow-hidden border border-purple-500/20 shadow-sm">
+                <CardContent className="p-0">
+                  <div className="flex items-center justify-between border-b border-border p-4">
+                    <div className="bg-muted/30 px-3 py-2 rounded font-mono text-sm overflow-hidden text-ellipsis max-w-[160px]">
+                      {key.keyString}
+                    </div>
+                    <Badge 
+                      variant="outline"
+                      className={`${statusColor.bg} ${statusColor.text} border-${statusColor.border}`}
+                    >
+                      {key.status}
+                    </Badge>
+                  </div>
+                  
+                  <div className="px-4 py-3 space-y-2 border-b border-border">
+                    <div className="flex items-center text-sm">
+                      <Gamepad2 className="h-4 w-4 mr-2 text-purple-400" />
+                      <span className="text-muted-foreground">Game:</span>
+                      <span className="ml-2 font-medium">{key.game}</span>
+                    </div>
+                    <div className="flex items-center text-sm">
+                      <Calendar className="h-4 w-4 mr-2 text-purple-400" />
+                      <span className="text-muted-foreground">Created:</span>
+                      <span className="ml-2">{formatDate(key.createdAt)}</span>
+                    </div>
+                    <div className="flex items-center text-sm">
+                      <CalendarClock className="h-4 w-4 mr-2 text-purple-400" />
+                      <span className="text-muted-foreground">Expires:</span>
+                      <span className="ml-2">{formatDate(key.expiryDate)}</span>
+                    </div>
+                    <div className="flex items-center text-sm">
+                      <Smartphone className="h-4 w-4 mr-2 text-purple-400" />
+                      <span className="text-muted-foreground">Devices:</span>
+                      <span className="ml-2">{key.devices}/{key.deviceLimit}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex p-3 gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="flex-1 border-blue-500/20 bg-blue-900/10 text-blue-500 hover:bg-blue-900/20"
+                      onClick={() => handleViewKey(key.id)}
+                    >
+                      <Eye className="h-4 w-4 mr-2" /> View Details
+                    </Button>
+                    {key.status === "ACTIVE" && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="flex-1 border-red-500/20 bg-red-900/10 text-red-500 hover:bg-red-900/20"
+                        onClick={() => handleRevokeKey(key.id)}
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" /> Revoke
+                      </Button>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })
+        ) : (
+          <Card className="border border-purple-500/20 shadow-sm">
+            <CardContent className="p-8 text-center">
+              <p className="text-muted-foreground">
+                No keys found. {searchTerm || gameFilter !== "all" ? "Try changing your search filters." : ""}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       {/* Key Details Modal */}
       <KeyDetailsModal

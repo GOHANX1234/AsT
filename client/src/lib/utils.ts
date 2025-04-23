@@ -41,15 +41,15 @@ export function getKeyStatus(key: any): string {
   return expiryDate <= now ? "EXPIRED" : "ACTIVE";
 }
 
-export function getStatusColor(status: string): { bg: string, text: string } {
+export function getStatusColor(status: string): { bg: string, text: string, border: string } {
   switch (status) {
     case "ACTIVE":
-      return { bg: "bg-green-100", text: "text-green-800" };
+      return { bg: "bg-green-500/10", text: "text-green-500", border: "border-green-500" };
     case "EXPIRED":
-      return { bg: "bg-red-100", text: "text-red-800" };
+      return { bg: "bg-red-500/10", text: "text-red-500", border: "border-red-500" };
     case "REVOKED":
-      return { bg: "bg-gray-100", text: "text-gray-800" };
+      return { bg: "bg-gray-500/10", text: "text-gray-500", border: "border-gray-500" };
     default:
-      return { bg: "bg-blue-100", text: "text-blue-800" };
+      return { bg: "bg-blue-500/10", text: "text-blue-500", border: "border-blue-500" };
   }
 }
