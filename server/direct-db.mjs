@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 
 // Set up data directory based on environment
 const DATA_DIR = process.env.NODE_ENV === 'production' && process.env.RENDER 
-  ? '/data' 
+  ? path.join(process.cwd(), 'data')  // Use a relative path that we can write to
   : path.join(process.cwd(), 'data');
 
 // Define file paths

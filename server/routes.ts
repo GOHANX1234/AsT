@@ -30,17 +30,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Set up session middleware
   const SessionStore = MemoryStore(session);
-  app.use(
-    session({
-      secret: "keymaster-secret",
-      resave: false,
-      saveUninitialized: false,
-      store: new SessionStore({
-        checkPeriod: 86400000 // 24 hours
-      }),
-      cookie: { secure: process.env.NODE_ENV === "production", maxAge: 24 * 60 * 60 * 1000 } // 24 hours
-    })
-  );
+  
+  // Check if we're in a production environment
+  const isProduction = process.env.NODE_ENV === "production";
+  
+  console.log("Session configuration:", {
+    production: isProduction,
+    secureCookie: process.env.COOKIE_SECURE,
+    sameSiteCookie: process.env.COOKIE_SAME_SITE
+  });
+  
+  // Set up session with different options based on environment
+  const sessionConfig = {
+    secret: process.env.SESSION_SECRET || "keymaster-secret",
+    resave: false,
+    saveUninitialized: false,
+    store: new SessionStore({
+      checkPeriod: 86400000 // 24 hours
+    }),
+    cookie: {
+      // Set secure to true in production, unless explicitly set to false
+      secure: process.env.COOKIE_SECURE === "true" || isProduction,
+      
+      // Set to 24 hours max age
+      maxAge: 24 * 60 * 60 * 1000,
+      
+      // This is the default path
+      path: "/",
+      
+      // Handle sameSite based on environment
+      sameSite: isProduction ? false : "lax"
+    }
+  };
+  
+  // Log session configuration
+  console.log("Applied session cookie configuration:", {
+    secure: sessionConfig.cookie.secure,
+    sameSite: sessionConfig.cookie.sameSite,
+    production: isProduction
+  });
+  
+  app.use(session(sessionConfig));
 
   // Set up passport authentication
   app.use(passport.initialize());
@@ -81,11 +111,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }));
 
   passport.serializeUser((user: any, done) => {
+    console.log("Serializing user:", user);
     done(null, JSON.stringify(user));
   });
 
   passport.deserializeUser((serializedUser: string, done) => {
-    done(null, JSON.parse(serializedUser));
+    try {
+      const user = JSON.parse(serializedUser);
+      console.log("Deserialized user:", user);
+      done(null, user);
+    } catch (error) {
+      console.error("Error deserializing user:", error);
+      done(error, null);
+    }
   });
 
   // Auth middleware
@@ -152,11 +190,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get('/api/auth/session', (req, res) => {
+    console.log("Session check:", {
+      isAuthenticated: req.isAuthenticated(),
+      user: req.user || null,
+      sessionID: req.sessionID,
+      cookies: req.headers.cookie
+    });
+    
     if (req.isAuthenticated()) {
       res.json({ isAuthenticated: true, user: req.user });
     } else {
       res.json({ isAuthenticated: false });
     }
+  });
+  
+  // Debug endpoint for checking session state
+  app.get('/api/auth/debug', (req, res) => {
+    res.json({
+      isAuthenticated: req.isAuthenticated(),
+      sessionID: req.sessionID,
+      cookies: req.headers.cookie,
+      user: req.user || null,
+      headers: req.headers
+    });
   });
 
   // Registration route

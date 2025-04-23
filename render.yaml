@@ -11,7 +11,11 @@ services:
         generateValue: true
       - key: RENDER
         value: true
+      - key: COOKIE_SECURE
+        value: true 
+      - key: COOKIE_SAME_SITE
+        value: none
     disk:
-      name: data
-      mountPath: /data
+      name: data-dir
+      mountPath: /opt/render/project/src/data
       sizeGB: 1
