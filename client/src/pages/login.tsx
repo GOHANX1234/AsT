@@ -173,7 +173,7 @@ export default function Login() {
                   
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-600 hover:to-indigo-500" 
+                    className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-600 hover:to-indigo-500 glow shine-effect relative" 
                     disabled={isLoading}
                   >
                     {isLoading ? "Logging in..." : "Login as Reseller"}
@@ -185,7 +185,7 @@ export default function Login() {
                 <p className="text-sm text-muted-foreground">Don't have an account?</p>
                 <Button 
                   variant="link" 
-                  className="mt-1 text-purple-400 hover:text-purple-300"
+                  className="mt-1 text-purple-400 hover:text-purple-300 glow-text"
                   onClick={() => window.location.href = "/register"}
                 >
                   Register with Referral Token
