@@ -32,4 +32,10 @@ echo "PWD: $(pwd)" >> dist/client/info.txt
 echo "Files in dist: $(ls -la dist)" >> dist/client/info.txt
 echo "Files in dist/client: $(ls -la dist/client)" >> dist/client/info.txt
 
+# Create data directory with proper permissions
+echo "Creating data directory with proper permissions..."
+mkdir -p data
+chmod 777 data
+echo "Data directory created and permissions set"
+
 echo "Deployment preparation complete!"

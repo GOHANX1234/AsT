@@ -41,7 +41,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Set up session with different options based on environment
-  const sessionConfig = {
+  let sameSiteOption: boolean | 'lax' | 'strict' | 'none' | undefined;
+
+  if (isProduction) {
+    sameSiteOption = 'none';
+  } else {
+    sameSiteOption = 'lax';
+  }
+
+  const sessionConfig: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || "keymaster-secret",
     resave: false,
     saveUninitialized: false,
@@ -59,14 +67,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       path: "/",
       
       // Handle sameSite based on environment
-      sameSite: isProduction ? false : "lax"
-    }
+      sameSite: sameSiteOption
+    },
+    // Add proxy trust for production environments
+    proxy: isProduction
   };
   
   // Log session configuration
   console.log("Applied session cookie configuration:", {
-    secure: sessionConfig.cookie.secure,
-    sameSite: sessionConfig.cookie.sameSite,
+    secure: sessionConfig.cookie?.secure,
+    sameSite: sessionConfig.cookie?.sameSite,
     production: isProduction
   });
   

@@ -1,9 +1,27 @@
 import express, { type Request, Response, NextFunction } from "express";
 import * as nodePath from "path";
+import cors from "cors";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
+
+// CORS configuration
+const isProduction = process.env.NODE_ENV === "production";
+// Only specify origins in production to avoid CORS issues
+const corsOptions = {
+  origin: isProduction ? 
+    ["https://aestrialhack.onrender.com", process.env.PUBLIC_URL].filter(Boolean) : 
+    true,
+  credentials: true, // Allow cookies to be sent with requests
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+
+// Apply CORS middleware
+app.use(cors(corsOptions));
+
+// Parse JSON and URL-encoded bodies
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
