@@ -5,16 +5,22 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const ADMIN_FILE = path.join('data', 'admin.json');
-const RESELLERS_FILE = path.join('data', 'resellers.json');
-const TOKENS_FILE = path.join('data', 'tokens.json');
-const KEYS_FILE = path.join('data', 'keys.json');
-const DEVICES_FILE = path.join('data', 'devices.json');
+// Set up data directory based on environment
+const DATA_DIR = process.env.NODE_ENV === 'production' && process.env.RENDER 
+  ? '/data' 
+  : path.join(process.cwd(), 'data');
+
+// Define file paths
+const ADMIN_FILE = path.join(DATA_DIR, 'admin.json');
+const RESELLERS_FILE = path.join(DATA_DIR, 'resellers.json');
+const TOKENS_FILE = path.join(DATA_DIR, 'tokens.json');
+const KEYS_FILE = path.join(DATA_DIR, 'keys.json');
+const DEVICES_FILE = path.join(DATA_DIR, 'devices.json');
 
 // Initialize with default data if files don't exist
 function initializeFiles() {
-  if (!fs.existsSync('data')) {
-    fs.mkdirSync('data', { recursive: true });
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
   }
   
   // Admin file
@@ -71,7 +77,7 @@ function writeJsonFile(file, data) {
 
 // Get reseller specific file path
 function getResellerFilePath(username) {
-  return path.join('data', `${username}.json`);
+  return path.join(DATA_DIR, `${username}.json`);
 }
 
 // Create or update reseller file

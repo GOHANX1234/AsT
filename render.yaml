@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: aestrial-hack
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SESSION_SECRET
+        generateValue: true
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
