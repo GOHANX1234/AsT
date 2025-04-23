@@ -72,8 +72,8 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <Card className="max-w-md w-full">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <Card className="max-w-md w-full border border-purple-500/20 shadow-lg shadow-purple-500/10">
         <CardContent className="pt-6">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-semibold text-primary bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">AestrialHack</h1>

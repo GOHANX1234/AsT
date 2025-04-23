@@ -46,12 +46,13 @@ export default function ResellerLayout({ children }: ResellerLayoutProps) {
       href: "/reseller/keys",
       active: location === "/reseller/keys",
     },
-    {
-      title: "API Reference",
-      icon: <Code className="mr-3 h-5 w-5" />,
-      href: "/reseller/api",
-      active: location === "/reseller/api",
-    },
+    // API Reference hidden as requested
+    // {
+    //   title: "API Reference",
+    //   icon: <Code className="mr-3 h-5 w-5" />,
+    //   href: "/reseller/api",
+    //   active: location === "/reseller/api",
+    // },
   ];
 
   const handleLogout = async () => {
@@ -59,21 +60,21 @@ export default function ResellerLayout({ children }: ResellerLayoutProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-background">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 py-4 px-6 flex justify-between items-center">
+      <header className="bg-background border-b border-border py-4 px-6 flex justify-between items-center">
         <div className="flex items-center">
-          <h1 className="text-2xl font-semibold text-secondary-500">KeyMaster</h1>
-          <span className="ml-2 px-2 py-1 bg-green-100 text-green-700 text-xs rounded-md">
+          <h1 className="text-2xl font-semibold bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">AestrialHack</h1>
+          <span className="ml-2 px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded-md border border-purple-500/20">
             Reseller
           </span>
         </div>
         <div className="flex items-center space-x-3">
-          <span className="text-sm text-gray-600">{user?.username}</span>
-          <span className="text-sm text-gray-800 font-medium">
-            Credits: <span>{profile?.credits || 0}</span>
+          <span className="text-sm text-foreground">{user?.username}</span>
+          <span className="text-sm text-purple-400 font-medium">
+            Credits: <span className="text-white">{profile?.credits || 0}</span>
           </span>
-          <Button variant="link" size="sm" className="text-red-600 hover:text-red-800" onClick={handleLogout}>
+          <Button variant="ghost" size="sm" className="text-red-400 hover:text-red-300 hover:bg-red-900/20" onClick={handleLogout}>
             Logout
           </Button>
           
@@ -88,8 +89,8 @@ export default function ResellerLayout({ children }: ResellerLayoutProps) {
               <SheetContent side="left" className="w-[240px] sm:w-[300px]">
                 <div className="flex flex-col h-full py-6">
                   <div className="flex items-center mb-6">
-                    <h2 className="text-lg font-semibold text-secondary-500">KeyMaster</h2>
-                    <span className="ml-2 px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-md">
+                    <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">AestrialHack</h2>
+                    <span className="ml-2 px-2 py-0.5 bg-purple-900/30 text-purple-400 text-xs rounded-md border border-purple-500/20">
                       Reseller
                     </span>
                   </div>
@@ -101,8 +102,8 @@ export default function ResellerLayout({ children }: ResellerLayoutProps) {
                             <a 
                               className={`flex items-center px-4 py-2 rounded-md text-sm ${
                                 item.active
-                                  ? "bg-green-50 text-secondary-500 font-medium"
-                                  : "text-gray-700 hover:bg-gray-100"
+                                  ? "bg-purple-900/30 text-purple-300 font-medium"
+                                  : "text-foreground hover:bg-muted"
                               }`}
                               onClick={() => setMobileMenuOpen(false)}
                             >
@@ -123,7 +124,7 @@ export default function ResellerLayout({ children }: ResellerLayoutProps) {
 
       <div className="flex flex-1">
         {/* Sidebar */}
-        <aside className="w-64 bg-white border-r border-gray-200 hidden md:block">
+        <aside className="w-64 bg-background border-r border-border hidden md:block">
           <nav className="mt-6 px-4">
             <ul className="space-y-2">
               {navItems.map((item) => (
@@ -132,8 +133,8 @@ export default function ResellerLayout({ children }: ResellerLayoutProps) {
                     <a
                       className={`flex items-center px-4 py-2 rounded-md ${
                         item.active
-                          ? "bg-green-50 text-secondary-500 font-medium"
-                          : "text-gray-700 hover:bg-gray-100"
+                          ? "bg-purple-900/30 text-purple-300 font-medium border border-purple-500/20"
+                          : "text-foreground hover:bg-muted"
                       }`}
                     >
                       {item.icon}
