@@ -128,15 +128,54 @@ html {
 .glow {
   box-shadow: 0 0 15px 2px rgba(149, 76, 233, 0.3);
   transition: all 0.3s ease;
+  animation: glow-pulse 4s infinite alternate;
 }
 
 .glow:hover {
   box-shadow: 0 0 20px 5px rgba(149, 76, 233, 0.5);
+  animation: glow-pulse-fast 2s infinite alternate;
+}
+
+@keyframes glow-pulse {
+  0% {
+    box-shadow: 0 0 15px 2px rgba(149, 76, 233, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px 4px rgba(149, 76, 233, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 25px 6px rgba(149, 76, 233, 0.4);
+  }
+}
+
+@keyframes glow-pulse-fast {
+  0% {
+    box-shadow: 0 0 20px 3px rgba(149, 76, 233, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px 6px rgba(149, 76, 233, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 30px 8px rgba(149, 76, 233, 0.5);
+  }
 }
 
 /* Text glow effect */
 .glow-text {
   text-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+  animation: text-glow-pulse 4s infinite alternate;
+}
+
+@keyframes text-glow-pulse {
+  0% {
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+  }
+  50% {
+    text-shadow: 0 0 15px rgba(168, 85, 247, 0.6), 0 0 20px rgba(168, 85, 247, 0.3);
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+  }
 }
 
 /* Shining/pulsing animation for elements */
@@ -172,5 +211,121 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(139, 92, 246, 0.5);
+}
+
+/* Moving glow elements */
+.moving-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.moving-glow::before,
+.moving-glow::after {
+  content: "";
+  position: absolute;
+  width: 150%;
+  height: 150%;
+  top: -25%;
+  left: -25%;
+  z-index: -1;
+  background: 
+    radial-gradient(
+      circle at center,
+      rgba(168, 85, 247, 0.3) 0%,
+      rgba(168, 85, 247, 0.1) 30%,
+      transparent 70%
+    );
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: move-glow 10s linear infinite;
+}
+
+.moving-glow::after {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: 
+    radial-gradient(
+      circle at center,
+      rgba(139, 92, 246, 0.3) 0%,
+      rgba(139, 92, 246, 0.1) 20%,
+      transparent 60%
+    );
+  animation: move-glow 15s linear infinite reverse;
+}
+
+@keyframes move-glow {
+  0% {
+    transform: translate(-30%, -30%) rotate(0deg);
+  }
+  25% {
+    transform: translate(30%, -30%) rotate(90deg);
+  }
+  50% {
+    transform: translate(30%, 30%) rotate(180deg);
+  }
+  75% {
+    transform: translate(-30%, 30%) rotate(270deg);
+  }
+  100% {
+    transform: translate(-30%, -30%) rotate(360deg);
+  }
+}
+
+/* Animated border glow */
+.border-glow {
+  position: relative;
+  z-index: 0;
+}
+
+.border-glow::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  z-index: -1;
+  background: linear-gradient(45deg, 
+    rgba(123, 31, 162, 0.7),
+    rgba(103, 58, 183, 0),
+    rgba(79, 98, 208, 0.7),
+    rgba(129, 18, 183, 0),
+    rgba(123, 31, 162, 0.7)
+  );
+  background-size: 400% 400%;
+  border-radius: inherit;
+  animation: border-glow-animation 15s ease infinite;
+  filter: blur(5px);
+}
+
+@keyframes border-glow-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Floating animation */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.float {
+  animation: float 6s ease-in-out infinite;
 }
 

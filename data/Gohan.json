@@ -1,27 +1,6 @@
 {
   "resellerId": 1,
   "username": "Gohan",
-  "keys": [
-    {
-      "keyString": "Lodit",
-      "game": "STANDOFF2",
-      "resellerId": 1,
-      "expiryDate": "2025-05-23T10:57:19.851Z",
-      "deviceLimit": 1,
-      "id": 1,
-      "createdAt": "2025-04-23T10:57:20.370Z",
-      "isRevoked": false
-    },
-    {
-      "keyString": "Lodit",
-      "game": "STANDOFF2",
-      "resellerId": 1,
-      "expiryDate": "2025-05-23T10:57:19.851Z",
-      "deviceLimit": 1,
-      "id": 1,
-      "createdAt": "2025-04-23T10:57:20.370Z",
-      "isRevoked": false
-    }
-  ],
-  "credits": 2
+  "keys": [],
+  "credits": 0
 }
