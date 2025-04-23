@@ -81,10 +81,22 @@ export default function Login() {
           </div>
 
           <Tabs defaultValue="admin" onValueChange={(value) => setActiveTab(value as "admin" | "reseller")}>
-            <TabsList className="grid w-full grid-cols-2 mb-2 bg-background/50 border border-purple-500/20">
-              <TabsTrigger value="admin" className="data-[state=active]:bg-purple-900/30 data-[state=active]:text-purple-300 data-[state=active]:shadow-none">Admin Login</TabsTrigger>
-              <TabsTrigger value="reseller" className="data-[state=active]:bg-purple-900/30 data-[state=active]:text-purple-300 data-[state=active]:shadow-none">Reseller Login</TabsTrigger>
-            </TabsList>
+            <div className="flex justify-center mb-4">
+              <TabsList className="inline-flex h-9 items-center justify-center rounded-lg bg-background/80 p-1 border border-purple-500/20">
+                <TabsTrigger 
+                  value="admin" 
+                  className="data-[state=active]:bg-purple-900/30 data-[state=active]:text-purple-300 data-[state=active]:shadow-none px-4 py-1.5 text-sm font-medium"
+                >
+                  Admin
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="reseller" 
+                  className="data-[state=active]:bg-purple-900/30 data-[state=active]:text-purple-300 data-[state=active]:shadow-none px-4 py-1.5 text-sm font-medium"
+                >
+                  Reseller
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
             <TabsContent value="admin">
               <Form {...adminForm}>
