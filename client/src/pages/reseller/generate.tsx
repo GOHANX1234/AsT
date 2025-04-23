@@ -1,31 +1,16 @@
-import { useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { queryClient } from "@/lib/queryClient";
-import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
+import React, { useState } from "react";
 import ResellerLayout from "@/layouts/reseller-layout";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Info } from "lucide-react";
 import { generateRandomKey } from "@/lib/utils";
@@ -33,8 +18,8 @@ import { generateRandomKey } from "@/lib/utils";
 const generateKeySchema = z.object({
   game: z.string().min(1, "Game selection is required"),
   deviceLimit: z.string().min(1, "Device limit is required"),
-  expiryDate: z.string().min(1, "Expiry date is required"),
-  keyCount: z.number().default(1),
+  days: z.number().min(1, "Must be at least 1 day").default(30),
+  keyCount: z.number().min(1, "Must generate at least 1 key").default(1),
   customKey: z.string().optional(),
 });
 
@@ -54,7 +39,7 @@ export default function ResellerGenerate() {
     defaultValues: {
       game: "",
       deviceLimit: "1",
-      expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().substring(0, 10), // 30 days from now
+      days: 30,
       keyCount: 1,
       customKey: "",
     },
@@ -66,8 +51,10 @@ export default function ResellerGenerate() {
       // Parse the device limit as a number
       const deviceLimit = parseInt(values.deviceLimit);
       
-      // Format the date correctly (server expects a Date object but it gets stringified properly)
-      const expiryDate = new Date(values.expiryDate);
+      // Calculate expiry date based on days
+      const today = new Date();
+      const expiryDate = new Date();
+      expiryDate.setDate(today.getDate() + values.days);
       
       // Get user ID for resellerId
       const user = (await apiRequest("GET", "/api/auth/session").then(res => res.json())).user;
@@ -109,7 +96,7 @@ export default function ResellerGenerate() {
         });
       }
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       toast({
         title: "Error",
         description: error.message || "Failed to generate keys",
@@ -207,13 +194,23 @@ export default function ResellerGenerate() {
 
               <FormField
                 control={form.control}
-                name="expiryDate"
+                name="days"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Expiry Date</FormLabel>
+                    <FormLabel>Number of Days</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input
+                        type="number"
+                        min="1"
+                        max="365"
+                        value={field.value.toString()}
+                        onChange={(e) => field.onChange(parseInt(e.target.value) || 30)}
+                        className="glow-input"
+                      />
                     </FormControl>
+                    <FormDescription>
+                      License will be valid for this many days from today
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -233,6 +230,7 @@ export default function ResellerGenerate() {
                           max="100"
                           value={field.value.toString()}
                           onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
+                          className="glow-input"
                         />
                       </FormControl>
                       <FormMessage />
@@ -251,12 +249,14 @@ export default function ResellerGenerate() {
                           <Input
                             placeholder="Leave empty for auto-generate"
                             {...field}
+                            className="glow-input"
                           />
                         </FormControl>
                         <Button
                           type="button"
                           variant="outline"
                           onClick={handleGenerateRandomKey}
+                          className="border-purple-500/30 text-purple-300 hover:bg-purple-900/40"
                         >
                           Random
                         </Button>
