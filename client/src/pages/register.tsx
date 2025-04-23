@@ -47,11 +47,11 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <Card className="max-w-md w-full border border-purple-500/20 shadow-lg shadow-purple-500/10">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 bg-gradient-to-br from-background via-background to-purple-950/20">
+      <Card className="max-w-md w-full border border-purple-500/30 shadow-xl shadow-purple-500/10 backdrop-blur-sm bg-background/80">
         <CardContent className="pt-6">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-semibold bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">AestrialHack</h1>
+            <h1 className="text-4xl font-bold text-primary bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent pb-1">AestrialHack</h1>
             <p className="text-muted-foreground mt-2">Reseller Registration</p>
           </div>
 
@@ -99,16 +99,18 @@ export default function Register() {
                 )}
               />
               
-              <Button type="submit" className="w-full" disabled={isLoading}>
+              <Button type="submit" className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-600 hover:to-indigo-500" disabled={isLoading}>
                 {isLoading ? "Registering..." : "Register Account"}
               </Button>
 
-              <div className="text-center mt-2">
-                <Link href="/">
-                  <Button variant="link" className="text-primary hover:text-primary/90">
-                    Back to Login
-                  </Button>
-                </Link>
+              <div className="text-center mt-4">
+                <Button 
+                  variant="link" 
+                  className="text-purple-400 hover:text-purple-300"
+                  onClick={() => window.location.href = "/"}
+                >
+                  Back to Login
+                </Button>
               </div>
             </form>
           </Form>

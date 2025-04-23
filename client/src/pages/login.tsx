@@ -117,7 +117,11 @@ export default function Login() {
                     )}
                   />
                   
-                  <Button type="submit" className="w-full" disabled={isLoading}>
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-600 hover:to-indigo-500" 
+                    disabled={isLoading}
+                  >
                     {isLoading ? "Logging in..." : "Login as Admin"}
                   </Button>
                 </form>
@@ -155,19 +159,25 @@ export default function Login() {
                     )}
                   />
                   
-                  <Button type="submit" className="w-full" disabled={isLoading}>
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-600 hover:to-indigo-500" 
+                    disabled={isLoading}
+                  >
                     {isLoading ? "Logging in..." : "Login as Reseller"}
                   </Button>
                 </form>
               </Form>
 
-              <div className="text-center mt-4 pt-4 border-t border-gray-200">
-                <p className="text-sm text-gray-600">Don't have an account?</p>
-                <Link href="/register">
-                  <Button variant="link" className="mt-1 font-medium">
-                    Register with Referral Token
-                  </Button>
-                </Link>
+              <div className="text-center mt-4 pt-4 border-t border-border">
+                <p className="text-sm text-muted-foreground">Don't have an account?</p>
+                <Button 
+                  variant="link" 
+                  className="mt-1 text-purple-400 hover:text-purple-300"
+                  onClick={() => window.location.href = "/register"}
+                >
+                  Register with Referral Token
+                </Button>
               </div>
             </TabsContent>
           </Tabs>
