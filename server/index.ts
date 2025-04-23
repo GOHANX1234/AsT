@@ -4,7 +4,13 @@ import cors from "cors";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 
+// Add trust proxy to avoid issues with secure cookies behind a proxy/load balancer
+// when deployed on Render or similar platforms
+
 const app = express();
+
+// Enable trust proxy to properly handle secure cookies in production environments
+app.set('trust proxy', 1);
 
 // CORS configuration
 const isProduction = process.env.NODE_ENV === "production";

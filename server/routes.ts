@@ -41,33 +41,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   // Set up session with different options based on environment
-  let sameSiteOption: boolean | 'lax' | 'strict' | 'none' | undefined;
+  const isSecure = process.env.COOKIE_SECURE === "true" || isProduction;
+  
+  // For SameSite configuration
+  // When using secure=true and sameSite=none, this allows cross-site cookies
+  // necessary for authentication across different domains
+  const sameSiteOption: boolean | 'lax' | 'strict' | 'none' | undefined = 
+    isProduction ? 'none' : 'lax';
 
-  if (isProduction) {
-    sameSiteOption = 'none';
-  } else {
-    sameSiteOption = 'lax';
-  }
+  // Handle domain for production
+  const cookieDomain = isProduction && process.env.PUBLIC_URL 
+    ? new URL(process.env.PUBLIC_URL).hostname 
+    : undefined;
 
+  // Set up session config
   const sessionConfig: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || "keymaster-secret",
-    resave: false,
-    saveUninitialized: false,
+    // Setting resave to true to ensure session stays alive
+    resave: true, 
+    // We need this for the initial session to be saved
+    saveUninitialized: true,
     store: new SessionStore({
       checkPeriod: 86400000 // 24 hours
     }),
     cookie: {
-      // Set secure to true in production, unless explicitly set to false
-      secure: process.env.COOKIE_SECURE === "true" || isProduction,
+      // Must be false for localhost, true for production HTTPS
+      secure: isSecure,
       
-      // Set to 24 hours max age
-      maxAge: 24 * 60 * 60 * 1000,
+      // Set to a longer max age (7 days)
+      maxAge: 7 * 24 * 60 * 60 * 1000,
       
-      // This is the default path
+      // Standard path
       path: "/",
       
-      // Handle sameSite based on environment
-      sameSite: sameSiteOption
+      // Set domain conditionally (only in production)
+      ...(cookieDomain ? { domain: cookieDomain } : {}),
+      
+      // Handle sameSite setting
+      sameSite: sameSiteOption,
+      
+      // Allow JavaScript access to the cookie
+      httpOnly: false
     },
     // Add proxy trust for production environments
     proxy: isProduction
@@ -77,6 +91,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   console.log("Applied session cookie configuration:", {
     secure: sessionConfig.cookie?.secure,
     sameSite: sessionConfig.cookie?.sameSite,
+    domain: sessionConfig.cookie?.domain,
+    httpOnly: sessionConfig.cookie?.httpOnly,
     production: isProduction
   });
   
@@ -158,36 +174,61 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.status(403).json({ message: 'Forbidden' });
   };
 
+  // Function to log authentication process
+  const logAuthProcess = (method: string, user: any, session: any) => {
+    console.log(`==== Auth process for ${method} ====`);
+    console.log('User:', user);
+    console.log('Session ID:', session?.id);
+    console.log('Session cookie:', session?.cookie);
+    console.log('==== End auth process ====');
+  }
+
   // Auth routes
   app.post('/api/auth/admin/login', (req, res, next) => {
+    console.log('Admin login attempt:', req.body.username);
+    
     passport.authenticate('admin', (err, user, info) => {
       if (err) {
+        console.error('Auth error:', err);
         return next(err);
       }
       if (!user) {
+        console.log('Auth failed:', info.message);
         return res.status(401).json({ message: info.message });
       }
+      
       req.logIn(user, (err) => {
         if (err) {
+          console.error('Login error:', err);
           return next(err);
         }
+        
+        logAuthProcess('admin', user, req.session);
         return res.json({ user });
       });
     })(req, res, next);
   });
 
   app.post('/api/auth/reseller/login', (req, res, next) => {
+    console.log('Reseller login attempt:', req.body.username);
+    
     passport.authenticate('reseller', (err, user, info) => {
       if (err) {
+        console.error('Auth error:', err);
         return next(err);
       }
       if (!user) {
+        console.log('Auth failed:', info.message);
         return res.status(401).json({ message: info.message });
       }
+      
       req.logIn(user, (err) => {
         if (err) {
+          console.error('Login error:', err);
           return next(err);
         }
+        
+        logAuthProcess('reseller', user, req.session);
         return res.json({ user });
       });
     })(req, res, next);
