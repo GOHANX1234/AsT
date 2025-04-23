@@ -69,18 +69,32 @@ export default function ResellerGenerate() {
       // Format the date correctly (server expects a Date object but it gets stringified properly)
       const expiryDate = new Date(values.expiryDate);
       
+      // Get user ID for resellerId
+      const user = (await apiRequest("GET", "/api/auth/session").then(res => res.json())).user;
+      
+      if (!user || !user.id) {
+        throw new Error("User session not found. Please log in again.");
+      }
+      
       const payload = {
         game: values.game,
         deviceLimit: deviceLimit,
         expiryDate: expiryDate,
         keyString: values.customKey || undefined,
         count: values.keyCount,
+        resellerId: user.id, // Add the resellerId from session
       };
       
       console.log("Sending payload:", payload);
       
       const response = await apiRequest("POST", "/api/reseller/keys/generate", payload);
-      return response.json();
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to generate key");
+      }
+      
+      return data;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['/api/reseller/profile'] });

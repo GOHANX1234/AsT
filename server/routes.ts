@@ -179,6 +179,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Mark token as used
       await storage.useToken(resellerData.referralToken, resellerData.username);
       
+      // Create a JSON file for the reseller's keys
+      try {
+        const resellerFilePath = path.join(dataDir, `${reseller.username}.json`);
+        const initialData = {
+          resellerId: reseller.id,
+          username: reseller.username,
+          keys: []
+        };
+        fs.writeFileSync(resellerFilePath, JSON.stringify(initialData, null, 2));
+        console.log(`Created key file for reseller: ${reseller.username}`);
+      } catch (fileError) {
+        console.error(`Error creating reseller key file: ${fileError.message}`);
+        // Continue even if file creation fails
+      }
+      
       res.status(201).json({ 
         success: true, 
         message: 'Registration successful',
@@ -406,6 +421,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Deduct credits
       await storage.updateResellerCredits(user.id, -count);
+      
+      // Also save keys to the reseller's JSON file
+      try {
+        const resellerFilePath = path.join(dataDir, `${reseller.username}.json`);
+        
+        // Check if file exists, if not create it
+        if (!fs.existsSync(resellerFilePath)) {
+          const initialData = {
+            resellerId: reseller.id,
+            username: reseller.username,
+            keys: []
+          };
+          fs.writeFileSync(resellerFilePath, JSON.stringify(initialData, null, 2));
+          console.log(`Created new key file for reseller: ${reseller.username}`);
+        }
+        
+        // Read current file data
+        const fileData = JSON.parse(fs.readFileSync(resellerFilePath, 'utf8'));
+        
+        // Add new keys to the data
+        generatedKeys.forEach(key => {
+          fileData.keys.push({
+            ...key,
+            createdAt: new Date().toISOString(), // Ensure proper date format
+            expiryDate: key.expiryDate.toISOString() // Ensure proper date format
+          });
+        });
+        
+        // Write updated data back to file
+        fs.writeFileSync(resellerFilePath, JSON.stringify(fileData, null, 2));
+        console.log(`Added ${generatedKeys.length} key(s) to ${reseller.username}'s file`);
+      } catch (fileError) {
+        console.error(`Error updating reseller key file: ${fileError.message}`);
+        // Continue even if file update fails
+      }
       
       res.status(201).json({
         success: true,
