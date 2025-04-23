@@ -1,47 +1,6 @@
 {
   "resellerId": 1,
   "username": "Gohan",
-  "keys": [
-    {
-      "keyString": "LIOS-JMY8A-VFXVQ-M8Q5E",
-      "game": "LAST ISLAND OF SURVIVAL",
-      "resellerId": 1,
-      "expiryDate": "2025-05-23T10:13:45.882Z",
-      "deviceLimit": 1,
-      "id": 1,
-      "createdAt": "2025-04-23T10:13:46.628Z",
-      "isRevoked": false
-    },
-    {
-      "keyString": "LIOS-JMY8A-VFXVQ-M8Q5E",
-      "game": "LAST ISLAND OF SURVIVAL",
-      "resellerId": 1,
-      "expiryDate": "2025-05-23T10:13:45.882Z",
-      "deviceLimit": 1,
-      "id": 1,
-      "createdAt": "2025-04-23T10:13:46.628Z",
-      "isRevoked": false
-    },
-    {
-      "keyString": "Xxx",
-      "game": "LAST ISLAND OF SURVIVAL",
-      "resellerId": 1,
-      "expiryDate": "2025-05-23T10:14:01.028Z",
-      "deviceLimit": 1,
-      "id": 2,
-      "createdAt": "2025-04-23T10:14:01.670Z",
-      "isRevoked": false
-    },
-    {
-      "keyString": "Xxx",
-      "game": "LAST ISLAND OF SURVIVAL",
-      "resellerId": 1,
-      "expiryDate": "2025-05-23T10:14:01.028Z",
-      "deviceLimit": 1,
-      "id": 2,
-      "createdAt": "2025-04-23T10:14:01.670Z",
-      "isRevoked": false
-    }
-  ],
-  "credits": 1
+  "keys": [],
+  "credits": 0
 }
