@@ -634,6 +634,111 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET API for key verification
+  app.get('/api/verify/:key/:game/:deviceId', async (req, res) => {
+    try {
+      const keyString = req.params.key;
+      const game = req.params.game;
+      const deviceId = req.params.deviceId;
+      
+      // Validate params
+      if (!keyString || !game || !deviceId) {
+        return res.status(400).json({ 
+          valid: false,
+          message: "Missing required parameters. Need key, game, and deviceId." 
+        });
+      }
+
+      // Validate game
+      if (!["PUBG MOBILE", "LAST ISLAND OF SURVIVAL", "STANDOFF2"].includes(game)) {
+        return res.status(400).json({ 
+          valid: false,
+          message: "Invalid game. Must be one of: PUBG MOBILE, LAST ISLAND OF SURVIVAL, STANDOFF2" 
+        });
+      }
+      
+      // Find the key
+      const key = await storage.getKey(keyString);
+      
+      // Key not found
+      if (!key) {
+        return res.json({
+          valid: false,
+          message: "Invalid license key"
+        });
+      }
+      
+      // Check if key is for the right game
+      if (key.game !== game) {
+        return res.json({
+          valid: false,
+          message: "License key is not valid for this game"
+        });
+      }
+      
+      // Check if key is revoked
+      if (key.isRevoked) {
+        return res.json({
+          valid: false,
+          message: "License key has been revoked"
+        });
+      }
+      
+      // Check if key is expired
+      const now = new Date();
+      if (new Date(key.expiryDate) <= now) {
+        return res.json({
+          valid: false,
+          message: "License key has expired",
+          expiry: key.expiryDate
+        });
+      }
+      
+      // Get devices for this key
+      const devices = await storage.getDevicesByKeyId(key.id);
+      
+      // Check if device is already registered
+      const deviceExists = devices.some(d => d.deviceId === deviceId);
+      
+      // If device exists, return success
+      if (deviceExists) {
+        return res.json({
+          valid: true,
+          expiry: key.expiryDate,
+          deviceLimit: key.deviceLimit,
+          currentDevices: devices.length,
+          message: "License valid"
+        });
+      }
+      
+      // Check device limit
+      if (devices.length >= key.deviceLimit) {
+        return res.json({
+          valid: false,
+          expiry: key.expiryDate,
+          deviceLimit: key.deviceLimit,
+          currentDevices: devices.length,
+          message: "Device limit reached for this license key"
+        });
+      }
+      
+      // Return success but do not register device (GET request is for checking only)
+      return res.json({
+        valid: true,
+        expiry: key.expiryDate,
+        deviceLimit: key.deviceLimit,
+        currentDevices: devices.length,
+        canRegister: true,
+        message: "License valid, device can be registered"
+      });
+    } catch (error) {
+      res.status(400).json({ 
+        valid: false,
+        message: "Error verifying license key" 
+      });
+    }
+  });
+
   // Helper functions
   function generateKeyString(game: string): string {
     let prefix = "";

@@ -162,6 +162,140 @@ Content-Type: application/json
             </Tabs>
           </CardContent>
         </Card>
+
+        <Card className="overflow-hidden border border-purple-500/20 shadow-lg shadow-purple-500/5">
+          <CardHeader className="px-6 py-4 border-b border-border bg-gradient-to-r from-purple-900/20 to-indigo-900/20">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent flex items-center">
+                <Webhook className="h-4 w-4 mr-2 text-purple-400" /> GET Key Verification Endpoint
+              </CardTitle>
+              <div className="text-xs text-muted-foreground rounded-full bg-muted px-2 py-1">
+                GET /api/verify/:key/:game/:deviceId
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4 sm:p-6">
+            <Tabs defaultValue="request" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-4">
+                <TabsTrigger value="request">Request</TabsTrigger>
+                <TabsTrigger value="response">Response</TabsTrigger>
+              </TabsList>
+              <TabsContent value="request" className="space-y-4">
+                <div className="relative bg-muted/40 p-4 rounded-md">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="absolute top-2 right-2 h-8 bg-muted/80"
+                    onClick={() => copyToClipboard(`GET /api/verify/YOUR_LICENSE_KEY/GAME_NAME/UNIQUE_DEVICE_IDENTIFIER`, "getRequest")}
+                  >
+                    {copiedSection === "getRequest" ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 mr-1 text-green-500" /> Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5 mr-1" /> Copy
+                      </>
+                    )}
+                  </Button>
+                  <pre className="font-mono text-sm overflow-x-auto whitespace-pre-wrap">
+{`GET /api/verify/YOUR_LICENSE_KEY/GAME_NAME/UNIQUE_DEVICE_IDENTIFIER`}
+                  </pre>
+                </div>
+                <div className="bg-purple-900/10 rounded-md p-4 space-y-2 border border-purple-500/20">
+                  <h4 className="text-sm font-semibold text-purple-400">URL Parameters</h4>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">key</span>
+                      <span>Your license key string</span>
+                    </li>
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">game</span>
+                      <span>Game name (PUBG MOBILE, LAST ISLAND OF SURVIVAL, STANDOFF2)</span>
+                    </li>
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">deviceId</span>
+                      <span>Unique identifier for the device (such as HWID or device fingerprint)</span>
+                    </li>
+                  </ul>
+                </div>
+                <div className="bg-green-900/10 rounded-md p-4 border border-green-500/20">
+                  <h4 className="text-sm font-semibold text-green-400 mb-2">Difference from POST Endpoint</h4>
+                  <p className="text-sm text-muted-foreground">
+                    The GET endpoint only checks if a key is valid but does not register the device. Use this for verification only.
+                    To register a device, use the POST endpoint.
+                  </p>
+                </div>
+              </TabsContent>
+              <TabsContent value="response" className="space-y-4">
+                <div className="relative bg-muted/40 p-4 rounded-md">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="absolute top-2 right-2 h-8 bg-muted/80"
+                    onClick={() => copyToClipboard(`{
+  "valid": true,
+  "expiry": "2025-12-31",
+  "deviceLimit": 2,
+  "currentDevices": 1,
+  "canRegister": true,
+  "message": "License valid, device can be registered"
+}`, "getResponse")}
+                  >
+                    {copiedSection === "getResponse" ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 mr-1 text-green-500" /> Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5 mr-1" /> Copy
+                      </>
+                    )}
+                  </Button>
+                  <pre className="font-mono text-sm overflow-x-auto whitespace-pre-wrap">
+{`{
+  "valid": true,
+  "expiry": "2025-12-31",
+  "deviceLimit": 2,
+  "currentDevices": 1,
+  "canRegister": true,
+  "message": "License valid, device can be registered"
+}`}
+                  </pre>
+                </div>
+                <div className="bg-purple-900/10 rounded-md p-4 space-y-2 border border-purple-500/20">
+                  <h4 className="text-sm font-semibold text-purple-400">Response Fields</h4>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">valid</span>
+                      <span>Boolean indicating if the license is valid and active</span>
+                    </li>
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">expiry</span>
+                      <span>Expiration date of the license in ISO format</span>
+                    </li>
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">deviceLimit</span>
+                      <span>Maximum number of devices allowed for this key</span>
+                    </li>
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">currentDevices</span>
+                      <span>Current number of devices registered to this key</span>
+                    </li>
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">canRegister</span>
+                      <span>Boolean indicating if a new device can be registered (only in GET response)</span>
+                    </li>
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">message</span>
+                      <span>Human-readable status message</span>
+                    </li>
+                  </ul>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
         
         <Card className="overflow-hidden border border-purple-500/20 shadow-lg shadow-purple-500/5">
           <CardHeader className="px-6 py-4 border-b border-border bg-gradient-to-r from-purple-900/20 to-indigo-900/20">
@@ -170,13 +304,20 @@ Content-Type: application/json
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 sm:p-6">
-            <div className="relative bg-muted/40 p-4 rounded-md">
-              <Button
-                variant="outline"
-                size="sm"
-                className="absolute top-2 right-2 h-8 bg-muted/80"
-                onClick={() => copyToClipboard(`// Example JavaScript Implementation
-async function verifyLicense(licenseKey, deviceId, game) {
+            <Tabs defaultValue="post" className="w-full mb-4">
+              <TabsList className="grid w-full grid-cols-2 mb-4">
+                <TabsTrigger value="post">POST Method</TabsTrigger>
+                <TabsTrigger value="get">GET Method</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="post" className="space-y-4">
+                <div className="relative bg-muted/40 p-4 rounded-md">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="absolute top-2 right-2 h-8 bg-muted/80"
+                    onClick={() => copyToClipboard(`// POST Implementation - Verifies and Registers Device
+async function verifyAndRegisterDevice(licenseKey, deviceId, game) {
   try {
     const response = await fetch('https://yourdomain.com/api/verify', {
       method: 'POST',
@@ -205,21 +346,21 @@ async function verifyLicense(licenseKey, deviceId, game) {
     console.error('Verification error:', error);
     return false;
   }
-}`, "implementation")}
-              >
-                {copiedSection === "implementation" ? (
-                  <>
-                    <Check className="h-3.5 w-3.5 mr-1 text-green-500" /> Copied
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-3.5 w-3.5 mr-1" /> Copy
-                  </>
-                )}
-              </Button>
-              <pre className="font-mono text-sm overflow-x-auto whitespace-pre-wrap">
-{`// Example JavaScript Implementation
-async function verifyLicense(licenseKey, deviceId, game) {
+}`, "post-implementation")}
+                  >
+                    {copiedSection === "post-implementation" ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 mr-1 text-green-500" /> Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5 mr-1" /> Copy
+                      </>
+                    )}
+                  </Button>
+                  <pre className="font-mono text-sm overflow-x-auto whitespace-pre-wrap">
+{`// POST Implementation - Verifies and Registers Device
+async function verifyAndRegisterDevice(licenseKey, deviceId, game) {
   try {
     const response = await fetch('https://yourdomain.com/api/verify', {
       method: 'POST',
@@ -249,8 +390,118 @@ async function verifyLicense(licenseKey, deviceId, game) {
     return false;
   }
 }`}
-              </pre>
-            </div>
+                  </pre>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="get" className="space-y-4">
+                <div className="relative bg-muted/40 p-4 rounded-md">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="absolute top-2 right-2 h-8 bg-muted/80"
+                    onClick={() => copyToClipboard(`// GET Implementation - Only Verifies, No Registration
+async function checkLicenseValidity(licenseKey, deviceId, game) {
+  try {
+    // URL encode parameters to handle special characters
+    const encodedKey = encodeURIComponent(licenseKey);
+    const encodedGame = encodeURIComponent(game);
+    const encodedDeviceId = encodeURIComponent(deviceId);
+    
+    const response = await fetch(
+      \`https://yourdomain.com/api/verify/\${encodedKey}/\${encodedGame}/\${encodedDeviceId}\`,
+      {
+        method: 'GET'
+      }
+    );
+    
+    const data = await response.json();
+    
+    if (data.valid) {
+      // License is valid
+      console.log('License is valid until:', data.expiry);
+      console.log('Can register this device:', data.canRegister);
+      return {
+        isValid: true,
+        canRegister: data.canRegister,
+        message: data.message,
+        expiry: data.expiry
+      };
+    } else {
+      // License invalid
+      console.error('License check failed:', data.message);
+      return {
+        isValid: false,
+        message: data.message
+      };
+    }
+  } catch (error) {
+    console.error('Verification error:', error);
+    return {
+      isValid: false,
+      message: 'Error connecting to license server'
+    };
+  }
+}`, "get-implementation")}
+                  >
+                    {copiedSection === "get-implementation" ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 mr-1 text-green-500" /> Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5 mr-1" /> Copy
+                      </>
+                    )}
+                  </Button>
+                  <pre className="font-mono text-sm overflow-x-auto whitespace-pre-wrap">
+{`// GET Implementation - Only Verifies, No Registration
+async function checkLicenseValidity(licenseKey, deviceId, game) {
+  try {
+    // URL encode parameters to handle special characters
+    const encodedKey = encodeURIComponent(licenseKey);
+    const encodedGame = encodeURIComponent(game);
+    const encodedDeviceId = encodeURIComponent(deviceId);
+    
+    const response = await fetch(
+      \`https://yourdomain.com/api/verify/\${encodedKey}/\${encodedGame}/\${encodedDeviceId}\`,
+      {
+        method: 'GET'
+      }
+    );
+    
+    const data = await response.json();
+    
+    if (data.valid) {
+      // License is valid
+      console.log('License is valid until:', data.expiry);
+      console.log('Can register this device:', data.canRegister);
+      return {
+        isValid: true,
+        canRegister: data.canRegister,
+        message: data.message,
+        expiry: data.expiry
+      };
+    } else {
+      // License invalid
+      console.error('License check failed:', data.message);
+      return {
+        isValid: false,
+        message: data.message
+      };
+    }
+  } catch (error) {
+    console.error('Verification error:', error);
+    return {
+      isValid: false,
+      message: 'Error connecting to license server'
+    };
+  }
+}`}
+                  </pre>
+                </div>
+              </TabsContent>
+            </Tabs>
             
             <div className="mt-4 p-4 bg-amber-900/10 border border-amber-500/20 rounded-md">
               <h4 className="text-sm font-semibold text-amber-400 flex items-center mb-2">
