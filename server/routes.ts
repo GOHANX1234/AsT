@@ -17,6 +17,9 @@ import { Strategy as LocalStrategy } from "passport-local";
 import fs from "fs";
 import path from "path";
 
+// Import our direct JSON database utility
+import * as db from './direct-db.mjs';
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Ensure data directory exists for reseller files
   const dataDir = path.join('.', 'data');
@@ -179,16 +182,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Mark token as used
       await storage.useToken(resellerData.referralToken, resellerData.username);
       
-      // Create a JSON file for the reseller's keys
+      // Create a JSON file for the reseller's keys using our utility
       try {
-        const resellerFilePath = path.join(dataDir, `${reseller.username}.json`);
-        const initialData = {
-          resellerId: reseller.id,
-          username: reseller.username,
-          keys: []
-        };
-        fs.writeFileSync(resellerFilePath, JSON.stringify(initialData, null, 2));
-        console.log(`Created key file for reseller: ${reseller.username}`);
+        // Use the utility to create the reseller's file
+        db.updateResellerFile(reseller);
+        console.log(`Created key file for reseller: ${reseller.username} using the DB utility`);
       } catch (fileError) {
         console.error(`Error creating reseller key file: ${fileError.message}`);
         // Continue even if file creation fails
@@ -430,36 +428,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Deduct credits
       await storage.updateResellerCredits(user.id, -count);
       
-      // Also save keys to the reseller's JSON file
+      // Also save keys to the reseller's JSON file using our utility
       try {
-        const resellerFilePath = path.join(dataDir, `${reseller.username}.json`);
+        // Format keys for storing in the JSON file
+        const formattedKeys = generatedKeys.map(key => ({
+          ...key,
+          createdAt: key.createdAt instanceof Date ? key.createdAt.toISOString() : key.createdAt,
+          expiryDate: key.expiryDate instanceof Date ? key.expiryDate.toISOString() : key.expiryDate
+        }));
         
-        // Check if file exists, if not create it
-        if (!fs.existsSync(resellerFilePath)) {
-          const initialData = {
-            resellerId: reseller.id,
-            username: reseller.username,
-            keys: []
-          };
-          fs.writeFileSync(resellerFilePath, JSON.stringify(initialData, null, 2));
-          console.log(`Created new key file for reseller: ${reseller.username}`);
-        }
+        // Use the utility to update the reseller's file
+        db.updateResellerFile(reseller, formattedKeys);
         
-        // Read current file data
-        const fileData = JSON.parse(fs.readFileSync(resellerFilePath, 'utf8'));
-        
-        // Add new keys to the data
-        generatedKeys.forEach(key => {
-          fileData.keys.push({
-            ...key,
-            createdAt: new Date().toISOString(), // Ensure proper date format
-            expiryDate: key.expiryDate.toISOString() // Ensure proper date format
-          });
-        });
-        
-        // Write updated data back to file
-        fs.writeFileSync(resellerFilePath, JSON.stringify(fileData, null, 2));
-        console.log(`Added ${generatedKeys.length} key(s) to ${reseller.username}'s file`);
+        console.log(`Added ${generatedKeys.length} key(s) to ${reseller.username}'s file using the DB utility`);
       } catch (fileError) {
         console.error(`Error updating reseller key file: ${fileError.message}`);
         // Continue even if file update fails
