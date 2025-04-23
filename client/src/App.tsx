@@ -6,7 +6,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import NotFound from "@/pages/not-found";
-import AuthPage from "@/pages/auth-page";
+import Login from "@/pages/login";
+import Register from "@/pages/register";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminResellers from "@/pages/admin/resellers";
 import AdminTokens from "@/pages/admin/tokens";
@@ -21,9 +22,9 @@ import { useEffect } from "react";
 function Router() {
   return (
     <Switch>
-      {/* Auth page */}
-      <Route path="/" component={AuthPage} />
-      <Route path="/auth" component={AuthPage} />
+      {/* Auth pages */}
+      <Route path="/" component={Login} />
+      <Route path="/register" component={Register} />
       
       {/* Admin pages */}
       <ProtectedRoute path="/admin" component={AdminDashboard} role="admin" />
