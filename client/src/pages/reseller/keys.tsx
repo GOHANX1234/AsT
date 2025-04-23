@@ -205,7 +205,7 @@ export default function ResellerKeys() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <Badge 
                             variant="outline"
-                            className={`${statusColor.bg} ${statusColor.text} border-${statusColor.border}`}
+                            className={`${statusColor.bg} ${statusColor.text}`}
                           >
                             {key.status}
                           </Badge>
@@ -267,7 +267,7 @@ export default function ResellerKeys() {
                     </div>
                     <Badge 
                       variant="outline"
-                      className={`${statusColor.bg} ${statusColor.text} border-${statusColor.border}`}
+                      className={`${statusColor.bg} ${statusColor.text}`}
                     >
                       {key.status}
                     </Badge>
