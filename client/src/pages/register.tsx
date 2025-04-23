@@ -37,7 +37,7 @@ export default function Register() {
         title: "Success",
         description: "Account registered successfully",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error",
         description: error.message || "Failed to register",
@@ -51,7 +51,7 @@ export default function Register() {
       <Card className="max-w-md w-full">
         <CardContent className="pt-6">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-semibold text-primary">KeyMaster</h1>
+            <h1 className="text-3xl font-semibold bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">AestrialHack</h1>
             <p className="text-muted-foreground mt-2">Reseller Registration</p>
           </div>
 
