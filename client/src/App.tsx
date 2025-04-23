@@ -6,8 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "next-themes";
 import NotFound from "@/pages/not-found";
-import Login from "@/pages/login";
-import Register from "@/pages/register";
+import AuthPage from "@/pages/auth-page";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminResellers from "@/pages/admin/resellers";
 import AdminTokens from "@/pages/admin/tokens";
@@ -22,24 +21,24 @@ import { useEffect } from "react";
 function Router() {
   return (
     <Switch>
-      {/* Auth pages */}
-      <Route path="/" component={Login} />
-      <Route path="/register" component={Register} />
+      {/* Auth page */}
+      <Route path="/" component={AuthPage} />
+      <Route path="/auth" component={AuthPage} />
       
       {/* Admin pages */}
-      <Route path="/admin" component={AdminDashboard} />
-      <Route path="/admin/resellers" component={AdminResellers} />
-      <Route path="/admin/tokens" component={AdminTokens} />
-      <Route path="/admin/api" component={AdminApi} />
+      <ProtectedRoute path="/admin" component={AdminDashboard} role="admin" />
+      <ProtectedRoute path="/admin/resellers" component={AdminResellers} role="admin" />
+      <ProtectedRoute path="/admin/tokens" component={AdminTokens} role="admin" />
+      <ProtectedRoute path="/admin/api" component={AdminApi} role="admin" />
       
       {/* Reseller pages */}
-      <Route path="/reseller" component={ResellerDashboard} />
-      <Route path="/reseller/generate" component={ResellerGenerate} />
-      <Route path="/reseller/keys" component={ResellerKeys} />
-      <Route path="/reseller/api" component={ResellerApi} />
+      <ProtectedRoute path="/reseller" component={ResellerDashboard} role="reseller" />
+      <ProtectedRoute path="/reseller/generate" component={ResellerGenerate} role="reseller" />
+      <ProtectedRoute path="/reseller/keys" component={ResellerKeys} role="reseller" />
+      <ProtectedRoute path="/reseller/api" component={ResellerApi} role="reseller" />
       
       {/* Fallback to 404 */}
-      <Route component={NotFound} />
+      <Route path="*" component={NotFound} />
     </Switch>
   );
 }
