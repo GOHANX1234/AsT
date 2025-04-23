@@ -69,6 +69,10 @@ export const insertKeySchema = createInsertSchema(keys)
     expiryDate: true,
     deviceLimit: true,
   })
+  .extend({
+    // Add days as an optional parameter
+    days: z.number().positive().optional(),
+  })
   .transform((data) => {
     // Convert deviceLimit to number if it's a string
     const deviceLimit = typeof data.deviceLimit === 'string' 
@@ -76,12 +80,28 @@ export const insertKeySchema = createInsertSchema(keys)
       : data.deviceLimit;
     
     // Make sure expiryDate is a Date object
-    const expiryDate = data.expiryDate instanceof Date 
-      ? data.expiryDate 
-      : new Date(data.expiryDate);
+    let expiryDate = data.expiryDate;
+    
+    // If days is provided and expiryDate is not, calculate expiry date based on days
+    if (data.days && !data.expiryDate) {
+      expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + data.days);
+    } else if (data.expiryDate) {
+      // Otherwise ensure expiryDate is a Date object
+      expiryDate = data.expiryDate instanceof Date 
+        ? data.expiryDate 
+        : new Date(data.expiryDate);
+    } else {
+      // Default to 30 days if neither is provided
+      expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + 30);
+    }
+    
+    // Remove days from final object
+    const { days, ...restData } = data;
     
     return {
-      ...data,
+      ...restData,
       deviceLimit,
       expiryDate,
     };

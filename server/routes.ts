@@ -366,14 +366,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Log request data for debugging
       console.log("Incoming key generation request:", req.body);
       
-      // Ensure expiryDate is properly formatted as a Date object
-      const formData = { 
-        ...req.body,
+      // Handle days parameter if provided instead of expiryDate
+      let formData = { ...req.body };
+      
+      // If days parameter is provided, calculate expiryDate based on days
+      if (req.body.days && !req.body.expiryDate) {
+        const days = parseInt(req.body.days);
+        const expiryDate = new Date();
+        expiryDate.setDate(expiryDate.getDate() + days);
+        formData.expiryDate = expiryDate;
+        console.log(`Calculated expiry date from ${days} days:`, expiryDate);
+      } else if (req.body.expiryDate) {
         // Parse expiryDate string to Date if it's a string
-        expiryDate: req.body.expiryDate instanceof Date 
+        formData.expiryDate = req.body.expiryDate instanceof Date 
           ? req.body.expiryDate 
-          : new Date(req.body.expiryDate)
-      };
+          : new Date(req.body.expiryDate);
+      }
       
       // Validate data with schema
       const keyData = insertKeySchema.parse(formData);

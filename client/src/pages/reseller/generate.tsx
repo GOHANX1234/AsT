@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Info } from "lucide-react";
 import { generateRandomKey } from "@/lib/utils";
 
+// Define the form schema
 const generateKeySchema = z.object({
   game: z.string().min(1, "Game selection is required"),
   deviceLimit: z.string().min(1, "Device limit is required"),
@@ -48,40 +49,46 @@ export default function ResellerGenerate() {
   // Generate key mutation
   const generateKeyMutation = useMutation({
     mutationFn: async (values: GenerateKeyValues) => {
-      // Parse the device limit as a number
-      const deviceLimit = parseInt(values.deviceLimit);
-      
-      // Calculate expiry date based on days
-      const today = new Date();
-      const expiryDate = new Date();
-      expiryDate.setDate(today.getDate() + values.days);
-      
-      // Get user ID for resellerId
-      const user = (await apiRequest("GET", "/api/auth/session").then(res => res.json())).user;
-      
-      if (!user || !user.id) {
-        throw new Error("User session not found. Please log in again.");
+      try {
+        // Parse the device limit as a number
+        const deviceLimit = parseInt(values.deviceLimit);
+        
+        // Calculate expiry date based on days
+        const today = new Date();
+        const expiryDate = new Date();
+        expiryDate.setDate(today.getDate() + values.days);
+        
+        // Get user session for resellerId
+        const sessionResponse = await apiRequest("GET", "/api/auth/session");
+        const sessionData = await sessionResponse.json();
+        
+        if (!sessionData.isAuthenticated || !sessionData.user || !sessionData.user.id) {
+          throw new Error("User session not found. Please log in again.");
+        }
+        
+        const payload = {
+          game: values.game,
+          deviceLimit: deviceLimit,
+          expiryDate: expiryDate,
+          keyString: values.customKey || undefined,
+          count: values.keyCount,
+          resellerId: sessionData.user.id, // Add the resellerId from session
+        };
+        
+        console.log("Sending key generation payload:", payload);
+        
+        const response = await apiRequest("POST", "/api/reseller/keys/generate", payload);
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to generate key");
+        }
+        
+        const data = await response.json();
+        return data;
+      } catch (error: any) {
+        console.error("Key generation error:", error);
+        throw new Error(error.message || "Failed to generate key");
       }
-      
-      const payload = {
-        game: values.game,
-        deviceLimit: deviceLimit,
-        expiryDate: expiryDate,
-        keyString: values.customKey || undefined,
-        count: values.keyCount,
-        resellerId: user.id, // Add the resellerId from session
-      };
-      
-      console.log("Sending payload:", payload);
-      
-      const response = await apiRequest("POST", "/api/reseller/keys/generate", payload);
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to generate key");
-      }
-      
-      return data;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['/api/reseller/profile'] });
@@ -205,7 +212,7 @@ export default function ResellerGenerate() {
                         max="365"
                         value={field.value.toString()}
                         onChange={(e) => field.onChange(parseInt(e.target.value) || 30)}
-                        className="glow-input"
+                        className="focus:border-purple-500 focus:ring-purple-500"
                       />
                     </FormControl>
                     <FormDescription>
@@ -230,7 +237,7 @@ export default function ResellerGenerate() {
                           max="100"
                           value={field.value.toString()}
                           onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
-                          className="glow-input"
+                          className="focus:border-purple-500 focus:ring-purple-500"
                         />
                       </FormControl>
                       <FormMessage />
@@ -249,7 +256,7 @@ export default function ResellerGenerate() {
                           <Input
                             placeholder="Leave empty for auto-generate"
                             {...field}
-                            className="glow-input"
+                            className="focus:border-purple-500 focus:ring-purple-500"
                           />
                         </FormControl>
                         <Button
