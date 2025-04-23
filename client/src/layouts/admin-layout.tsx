@@ -53,18 +53,18 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-background">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 py-4 px-6 flex justify-between items-center">
+      <header className="bg-background border-b border-border py-4 px-6 flex justify-between items-center">
         <div className="flex items-center">
-          <h1 className="text-2xl font-semibold text-primary">KeyMaster</h1>
-          <span className="ml-2 px-2 py-1 bg-primary/10 text-primary text-xs rounded-md">
+          <h1 className="text-2xl font-semibold bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">AestrialHack</h1>
+          <span className="ml-2 px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded-md border border-purple-500/20">
             Admin
           </span>
         </div>
         <div className="flex items-center space-x-3">
-          <span className="text-sm text-gray-600">{user?.username}</span>
-          <Button variant="link" size="sm" className="text-red-600 hover:text-red-800" onClick={handleLogout}>
+          <span className="text-sm text-foreground">{user?.username}</span>
+          <Button variant="ghost" size="sm" className="text-red-400 hover:text-red-300 hover:bg-red-900/20" onClick={handleLogout}>
             Logout
           </Button>
           
@@ -76,11 +76,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-[240px] sm:w-[300px]">
+              <SheetContent side="left" className="w-[240px] sm:w-[300px] bg-background border-r border-border">
                 <div className="flex flex-col h-full py-6">
                   <div className="flex items-center mb-6">
-                    <h2 className="text-lg font-semibold text-primary">KeyMaster</h2>
-                    <span className="ml-2 px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-md">
+                    <h2 className="text-lg font-semibold bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">AestrialHack</h2>
+                    <span className="ml-2 px-2 py-0.5 bg-purple-900/30 text-purple-400 text-xs rounded-md border border-purple-500/20">
                       Admin
                     </span>
                   </div>
@@ -92,8 +92,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                             <a 
                               className={`flex items-center px-4 py-2 rounded-md text-sm ${
                                 item.active
-                                  ? "bg-primary/10 text-primary font-medium"
-                                  : "text-gray-700 hover:bg-gray-100"
+                                  ? "bg-purple-900/30 text-purple-300 font-medium border border-purple-500/20"
+                                  : "text-foreground hover:bg-muted"
                               }`}
                               onClick={() => setMobileMenuOpen(false)}
                             >
@@ -114,7 +114,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
       <div className="flex flex-1">
         {/* Sidebar */}
-        <aside className="w-64 bg-white border-r border-gray-200 hidden md:block">
+        <aside className="w-64 bg-background border-r border-border hidden md:block">
           <nav className="mt-6 px-4">
             <ul className="space-y-2">
               {navItems.map((item) => (
@@ -123,8 +123,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                     <a
                       className={`flex items-center px-4 py-2 rounded-md ${
                         item.active
-                          ? "bg-primary/10 text-primary font-medium"
-                          : "text-gray-700 hover:bg-gray-100"
+                          ? "bg-purple-900/30 text-purple-300 font-medium border border-purple-500/20"
+                          : "text-foreground hover:bg-muted"
                       }`}
                     >
                       {item.icon}
