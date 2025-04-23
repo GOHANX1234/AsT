@@ -7,6 +7,8 @@ import {
   Game, keyStatusEnum, KeyStatus
 } from "@shared/schema";
 import { nanoid } from "nanoid";
+import * as fs from 'fs';
+import * as path from 'path';
 
 export interface IStorage {
   // Admin methods
@@ -153,6 +155,28 @@ export class MemStorage implements IStorage {
       isActive: true
     };
     this.resellers.set(id, reseller);
+    
+    // Create a personal JSON file for the reseller's keys
+    try {
+      // Check if a directory for storing reseller files exists, if not create it
+      const resellerDirPath = path.join('.', 'data');
+      if (!fs.existsSync(resellerDirPath)) {
+        fs.mkdirSync(resellerDirPath, { recursive: true });
+      }
+      
+      // Create a personal JSON file for the reseller with their username
+      const filePath = path.join(resellerDirPath, `${reseller.username}.json`);
+      const initialData = {
+        resellerId: reseller.id,
+        username: reseller.username,
+        keys: []
+      };
+      fs.writeFileSync(filePath, JSON.stringify(initialData, null, 2));
+      console.log(`Created key file for reseller: ${reseller.username}`);
+    } catch (error: any) {
+      console.error(`Error creating reseller file: ${error.message}`);
+    }
+    
     return reseller;
   }
 
@@ -196,6 +220,35 @@ export class MemStorage implements IStorage {
       isRevoked: false
     };
     this.keys.set(id, key);
+    
+    // Also save the key to the reseller's JSON file
+    try {
+      // Get the reseller to find their username
+      const reseller = await this.getReseller(insertKey.resellerId);
+      if (reseller) {
+        const resellerDirPath = path.join('.', 'data');
+        const filePath = path.join(resellerDirPath, `${reseller.username}.json`);
+        
+        // Read the current data
+        if (fs.existsSync(filePath)) {
+          const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+          
+          // Add the new key to the keys array
+          data.keys.push({
+            ...key,
+            createdAt: key.createdAt.toISOString(),
+            expiryDate: key.expiryDate.toISOString()
+          });
+          
+          // Write the updated data back to the file
+          fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+          console.log(`Added key to ${reseller.username}'s file: ${key.keyString}`);
+        }
+      }
+    } catch (error: any) {
+      console.error(`Error adding key to reseller file: ${error.message}`);
+    }
+    
     return key;
   }
 
