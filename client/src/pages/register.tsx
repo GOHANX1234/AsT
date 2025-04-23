@@ -99,7 +99,7 @@ export default function Register() {
                 )}
               />
               
-              <Button type="submit" className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-600 hover:to-indigo-500 glow shine-effect relative" disabled={isLoading}>
+              <Button type="submit" className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-600 hover:to-indigo-500 relative" disabled={isLoading}>
                 {isLoading ? "Registering..." : "Register Account"}
               </Button>
 
