@@ -9,20 +9,27 @@ npm run build
 # Create the necessary directory structure
 echo "Creating proper directory structure for deployment..."
 
-# Ensure we have a public directory
-mkdir -p dist/public
+# Ensure we have the client directory structure
+mkdir -p dist/client
 
-# Copy assets if they exist
+# Check if we have the expected build output
 if [ -d "dist/assets" ]; then
-  echo "Copying assets to public folder..."
-  mkdir -p dist/public/assets
-  cp -R dist/assets/* dist/public/assets/
+  echo "Copying assets to client folder..."
+  mkdir -p dist/client/assets
+  cp -R dist/assets/* dist/client/assets/
 fi
 
-# Copy index.html to public folder
+# Copy index.html to client folder
 if [ -f "dist/index.html" ]; then
-  echo "Copying index.html to public folder..."
-  cp dist/index.html dist/public/
+  echo "Copying index.html to client folder..."
+  cp dist/index.html dist/client/
 fi
+
+# Create an info.txt file to help with debugging
+echo "Build completed at $(date)" > dist/client/info.txt
+echo "NODE_ENV: $NODE_ENV" >> dist/client/info.txt
+echo "PWD: $(pwd)" >> dist/client/info.txt
+echo "Files in dist: $(ls -la dist)" >> dist/client/info.txt
+echo "Files in dist/client: $(ls -la dist/client)" >> dist/client/info.txt
 
 echo "Deployment preparation complete!"
