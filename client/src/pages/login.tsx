@@ -73,7 +73,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4 bg-gradient-to-br from-background via-background to-purple-950/20 moving-glow">
-      <Card className="max-w-md w-full border border-purple-500/30 shadow-xl shadow-purple-500/10 backdrop-blur-sm bg-background/80 border-glow relative z-10">
+      <Card className="max-w-md w-full border border-purple-500/30 shadow-xl shadow-purple-500/10 backdrop-blur-sm bg-background/80 form-border-glow relative z-10">
         <CardContent className="pt-6">
           <div className="text-center mb-8 float">
             <h1 className="text-4xl font-bold text-primary bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent pb-1 glow-text shine-effect">AestrialHack</h1>
@@ -131,7 +131,7 @@ export default function Login() {
                   
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-600 hover:to-indigo-500 glow shine-effect relative" 
+                    className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-600 hover:to-indigo-500 relative" 
                     disabled={isLoading}
                   >
                     {isLoading ? "Logging in..." : "Login as Admin"}
@@ -173,7 +173,7 @@ export default function Login() {
                   
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-600 hover:to-indigo-500 glow shine-effect relative" 
+                    className="w-full bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-600 hover:to-indigo-500 relative" 
                     disabled={isLoading}
                   >
                     {isLoading ? "Logging in..." : "Login as Reseller"}
