@@ -347,7 +347,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/reseller/keys/generate', isReseller, async (req, res) => {
     try {
       const user = req.user as any;
-      const keyData = insertKeySchema.parse(req.body);
+      
+      // Log request data for debugging
+      console.log("Incoming key generation request:", req.body);
+      
+      // Ensure expiryDate is properly formatted as a Date object
+      const formData = { 
+        ...req.body,
+        // Parse expiryDate string to Date if it's a string
+        expiryDate: req.body.expiryDate instanceof Date 
+          ? req.body.expiryDate 
+          : new Date(req.body.expiryDate)
+      };
+      
+      // Validate data with schema
+      const keyData = insertKeySchema.parse(formData);
+      
+      // Log parsed data
+      console.log("Parsed key data:", keyData);
       
       // Validate game enum
       try {

@@ -63,13 +63,23 @@ export default function ResellerGenerate() {
   // Generate key mutation
   const generateKeyMutation = useMutation({
     mutationFn: async (values: GenerateKeyValues) => {
-      const response = await apiRequest("POST", "/api/reseller/keys/generate", {
+      // Parse the device limit as a number
+      const deviceLimit = parseInt(values.deviceLimit);
+      
+      // Format the date correctly (server expects a Date object but it gets stringified properly)
+      const expiryDate = new Date(values.expiryDate);
+      
+      const payload = {
         game: values.game,
-        deviceLimit: parseInt(values.deviceLimit),
-        expiryDate: new Date(values.expiryDate),
+        deviceLimit: deviceLimit,
+        expiryDate: expiryDate,
         keyString: values.customKey || undefined,
         count: values.keyCount,
-      });
+      };
+      
+      console.log("Sending payload:", payload);
+      
+      const response = await apiRequest("POST", "/api/reseller/keys/generate", payload);
       return response.json();
     },
     onSuccess: (data) => {

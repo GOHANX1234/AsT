@@ -60,13 +60,32 @@ export const keys = pgTable("keys", {
   isRevoked: boolean("is_revoked").default(false).notNull(),
 });
 
-export const insertKeySchema = createInsertSchema(keys).pick({
-  keyString: true,
-  game: true,
-  resellerId: true,
-  expiryDate: true,
-  deviceLimit: true,
-});
+// Add transformations for proper type conversion
+export const insertKeySchema = createInsertSchema(keys)
+  .pick({
+    keyString: true,
+    game: true,
+    resellerId: true,
+    expiryDate: true,
+    deviceLimit: true,
+  })
+  .transform((data) => {
+    // Convert deviceLimit to number if it's a string
+    const deviceLimit = typeof data.deviceLimit === 'string' 
+      ? parseInt(data.deviceLimit) 
+      : data.deviceLimit;
+    
+    // Make sure expiryDate is a Date object
+    const expiryDate = data.expiryDate instanceof Date 
+      ? data.expiryDate 
+      : new Date(data.expiryDate);
+    
+    return {
+      ...data,
+      deviceLimit,
+      expiryDate,
+    };
+  });
 
 // Device table
 export const devices = pgTable("devices", {
