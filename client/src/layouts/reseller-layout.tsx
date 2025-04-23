@@ -64,11 +64,83 @@ export default function ResellerLayout({ children }: ResellerLayoutProps) {
       {/* Header */}
       <header className="bg-black/60 backdrop-blur-sm border-b border-purple-900/30 py-4 px-6 flex justify-between items-center sticky top-0 z-50 shadow-lg shadow-purple-500/5">
         <div className="flex items-center">
+          {/* Hamburger Menu for Mobile */}
+          <div className="sm:hidden mr-3 hamburger-fade-in">
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="border border-purple-500/30 bg-purple-900/20 shadow-lg shadow-purple-500/30 hover:bg-purple-900/30 hover:border-purple-500/50 transition-all hover:shadow-xl hover:shadow-purple-500/40"
+                >
+                  <Menu className="h-5 w-5 text-purple-300" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[280px] sm:w-[320px] bg-black/90 border-r border-purple-900/30">
+                <div className="flex flex-col h-full py-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center">
+                      <h2 className="text-xl font-bold bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent glow-text">AestrialHack</h2>
+                      <span className="ml-2 px-2 py-0.5 bg-purple-900/30 text-purple-400 text-xs rounded-md border border-purple-500/20">
+                        Reseller
+                      </span>
+                    </div>
+                    <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
+                      <X className="h-5 w-5 text-muted-foreground" />
+                    </Button>
+                  </div>
+                  
+                  {/* User info in mobile menu */}
+                  <div className="bg-purple-900/20 p-4 rounded-lg border border-purple-500/20 mb-6">
+                    <div className="text-sm text-foreground mb-2">Logged in as <span className="font-medium text-white">{user?.username}</span></div>
+                    <div className="text-sm text-purple-400 font-medium">
+                      Available Credits: <span className="text-white">{profile?.credits || 0}</span>
+                    </div>
+                  </div>
+                  
+                  <nav className="flex-1">
+                    <ul className="space-y-2">
+                      {navItems.map((item) => (
+                        <li key={item.href}>
+                          <Link href={item.href}>
+                            <div 
+                              className={`flex items-center px-4 py-3 rounded-md text-sm cursor-pointer transition-colors ${
+                                item.active
+                                  ? "bg-purple-900/30 text-purple-300 font-medium border border-purple-500/20"
+                                  : "text-foreground hover:bg-purple-900/20 hover:text-purple-300"
+                              }`}
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              {item.icon}
+                              {item.title}
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                  
+                  <Button 
+                    variant="ghost" 
+                    className="mt-6 text-red-400 hover:text-red-300 hover:bg-red-900/20 border border-red-500/20 w-full" 
+                    onClick={() => {
+                      handleLogout();
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
+          
           <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent glow-text">AestrialHack</h1>
           <span className="ml-2 px-2 py-1 bg-purple-900/30 text-purple-400 text-xs rounded-md border border-purple-500/20">
             Reseller
           </span>
         </div>
+        
         <div className="flex items-center space-x-3">
           <div className="hidden sm:flex items-center space-x-3">
             <span className="text-sm text-foreground">{user?.username}</span>
@@ -88,76 +160,6 @@ export default function ResellerLayout({ children }: ResellerLayoutProps) {
       </header>
 
       <div className="flex flex-1 relative">
-        {/* Left side hamburger for mobile/tablet - fixed position */}
-        <div className="absolute sm:hidden left-4 top-4 z-10 hamburger-fade-in">
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="border border-purple-500/30 bg-purple-900/20 shadow-lg shadow-purple-500/30 hover:bg-purple-900/30 hover:border-purple-500/50 transition-all hover:shadow-xl hover:shadow-purple-500/40"
-              >
-                <Menu className="h-5 w-5 text-purple-300" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-[280px] sm:w-[320px] bg-black/90 border-r border-purple-900/30">
-              <div className="flex flex-col h-full py-6">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center">
-                    <h2 className="text-xl font-bold bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent glow-text">AestrialHack</h2>
-                    <span className="ml-2 px-2 py-0.5 bg-purple-900/30 text-purple-400 text-xs rounded-md border border-purple-500/20">
-                      Reseller
-                    </span>
-                  </div>
-                  <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
-                    <X className="h-5 w-5 text-muted-foreground" />
-                  </Button>
-                </div>
-                
-                {/* User info in mobile menu */}
-                <div className="bg-purple-900/20 p-4 rounded-lg border border-purple-500/20 mb-6">
-                  <div className="text-sm text-foreground mb-2">Logged in as <span className="font-medium text-white">{user?.username}</span></div>
-                  <div className="text-sm text-purple-400 font-medium">
-                    Available Credits: <span className="text-white">{profile?.credits || 0}</span>
-                  </div>
-                </div>
-                
-                <nav className="flex-1">
-                  <ul className="space-y-2">
-                    {navItems.map((item) => (
-                      <li key={item.href}>
-                        <Link href={item.href}>
-                          <div 
-                            className={`flex items-center px-4 py-3 rounded-md text-sm cursor-pointer transition-colors ${
-                              item.active
-                                ? "bg-purple-900/30 text-purple-300 font-medium border border-purple-500/20"
-                                : "text-foreground hover:bg-purple-900/20 hover:text-purple-300"
-                            }`}
-                            onClick={() => setMobileMenuOpen(false)}
-                          >
-                            {item.icon}
-                            {item.title}
-                          </div>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </nav>
-                
-                <Button 
-                  variant="ghost" 
-                  className="mt-6 text-red-400 hover:text-red-300 hover:bg-red-900/20 border border-red-500/20 w-full" 
-                  onClick={() => {
-                    handleLogout();
-                    setMobileMenuOpen(false);
-                  }}
-                >
-                  Logout
-                </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
 
         {/* Sidebar for desktop */}
         <aside className="w-64 bg-black/50 border-r border-purple-900/30 hidden sm:block">
