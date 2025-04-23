@@ -24,10 +24,21 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [location, navigate] = useLocation();
   
-  // Get the current session
-  const { data, isLoading } = useQuery({ 
+  // Direct implementation using getQueryFn to fetch session, ensuring credentials are included
+  const { data, isLoading } = useQuery<{ isAuthenticated: boolean; user?: User }>({ 
     queryKey: ['/api/auth/session'],
-    refetchOnWindowFocus: true
+    queryFn: async () => {
+      const response = await fetch('/api/auth/session', {
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      return await response.json();
+    },
+    refetchOnWindowFocus: true,
+    staleTime: 10 * 1000, // 10 seconds
+    retry: 3
   });
   
   const isAuthenticated = data?.isAuthenticated || false;
@@ -44,23 +55,63 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       username: string; 
       password: string;
     }) => {
-      const response = await apiRequest('POST', `/api/auth/${role}/login`, { username, password });
+      console.log(`Attempting ${role} login with credentials...`);
+      
+      // Add additional headers for auth
+      const response = await fetch(`/api/auth/${role}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password }),
+        credentials: 'include'
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Login failed');
+      }
+      
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('Login successful:', data);
+      // Force refetch session after login
       queryClient.invalidateQueries({ queryKey: ['/api/auth/session'] });
+    },
+    onError: (error) => {
+      console.error('Login error:', error);
     }
   });
   
   // Logout mutation
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const response = await apiRequest('POST', '/api/auth/logout', {});
+      console.log('Attempting logout...');
+      
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      });
+      
+      if (!response.ok) {
+        throw new Error('Logout failed');
+      }
+      
       return response.json();
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/auth/session'] });
+    onSuccess: (data) => {
+      console.log('Logout successful:', data);
+      // Force reset session
+      queryClient.resetQueries({ queryKey: ['/api/auth/session'] });
+      queryClient.setQueryData(['/api/auth/session'], { isAuthenticated: false, user: null });
       navigate('/');
+    },
+    onError: (error) => {
+      console.error('Logout error:', error);
     }
   });
   
@@ -75,15 +126,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       password: string; 
       referralToken: string;
     }) => {
-      const response = await apiRequest('POST', '/api/auth/reseller/register', { 
-        username, 
-        password, 
-        referralToken 
+      console.log('Attempting registration...');
+      
+      const response = await fetch('/api/auth/reseller/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+          username, 
+          password, 
+          referralToken 
+        }),
+        credentials: 'include'
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Registration failed');
+      }
+      
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('Registration successful:', data);
       navigate('/');
+    },
+    onError: (error) => {
+      console.error('Registration error:', error);
     }
   });
   
