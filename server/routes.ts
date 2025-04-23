@@ -224,6 +224,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       headers: req.headers
     });
   });
+  
+  // Simple test endpoint that doesn't require authentication
+  app.get('/api/test', (req, res) => {
+    res.json({
+      message: "API is working",
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV,
+      sessionID: req.sessionID,
+      hasCookies: !!req.headers.cookie
+    });
+  });
 
   // Registration route
   app.post('/api/auth/reseller/register', async (req, res) => {

@@ -8,18 +8,19 @@ const app = express();
 
 // CORS configuration
 const isProduction = process.env.NODE_ENV === "production";
-// Only specify origins in production to avoid CORS issues
-const corsOptions = {
-  origin: isProduction ? 
-    ["https://aestrialhack.onrender.com", process.env.PUBLIC_URL].filter(Boolean) : 
-    true,
+
+// Define origins for CORS
+const corsOrigin = isProduction
+  ? ["https://aestrialhack.onrender.com"] // Only allow specific origins in production
+  : true; // Allow all origins in development
+
+// Apply CORS middleware
+app.use(cors({
+  origin: corsOrigin,
   credentials: true, // Allow cookies to be sent with requests
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-};
-
-// Apply CORS middleware
-app.use(cors(corsOptions));
+}));
 
 // Parse JSON and URL-encoded bodies
 app.use(express.json());
