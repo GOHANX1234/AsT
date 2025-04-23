@@ -60,20 +60,30 @@ export default function AdminResellers() {
 
   return (
     <AdminLayout>
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold">Manage Resellers</h2>
-        <Button
-          onClick={() => setAddCreditModalOpen(true)}
-          className="flex items-center"
-        >
-          <PlusCircle className="mr-1 h-4 w-4" /> Add Credit
-        </Button>
+      <div className="space-y-2 mb-4">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">Manage Resellers</h2>
+        <p className="text-muted-foreground text-sm">Add credits or suspend reseller accounts</p>
+      </div>
+      
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 w-full sm:w-auto gap-2">
+          <Button
+            onClick={() => setAddCreditModalOpen(true)}
+            className="bg-gradient-to-r from-purple-700 to-indigo-600 hover:from-purple-600 hover:to-indigo-500 text-white shadow-lg shadow-purple-900/20 border border-purple-500/20"
+          >
+            <PlusCircle className="mr-2 h-4 w-4" /> Add Credit
+          </Button>
+        </div>
       </div>
 
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden border border-purple-500/20 shadow-lg shadow-purple-500/5">
+        <CardHeader className="px-6 py-4 border-b border-border bg-gradient-to-r from-purple-900/20 to-indigo-900/20 hidden sm:block">
+          <CardTitle className="text-base font-medium bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">Reseller Accounts</CardTitle>
+        </CardHeader>
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+          {/* Desktop Table View */}
+          <div className="hidden md:block overflow-x-auto">
+            <table className="min-w-full divide-y divide-border">
               <thead className="bg-muted/50">
                 <tr>
                   <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
@@ -96,76 +106,148 @@ export default function AdminResellers() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-border">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">
-                      Loading resellers...
+                    <td colSpan={6} className="px-6 py-4 text-center text-sm text-muted-foreground">
+                      <div className="flex justify-center">
+                        <div className="animate-spin h-5 w-5 border-t-2 border-purple-500 rounded-full"></div>
+                      </div>
                     </td>
                   </tr>
                 ) : resellers && resellers.length > 0 ? (
                   resellers.map((reseller) => (
-                    <tr key={reseller.id}>
+                    <tr key={reseller.id} className="hover:bg-purple-900/5">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <div className="flex-shrink-0 h-8 w-8 bg-primary/10 rounded-full flex items-center justify-center">
-                            <span className="text-primary font-medium">
+                          <div className="flex-shrink-0 h-8 w-8 bg-purple-900/30 rounded-full flex items-center justify-center border border-purple-500/20">
+                            <span className="text-purple-400 font-medium">
                               {reseller.username.charAt(0).toUpperCase()}
                             </span>
                           </div>
                           <div className="ml-3">
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-medium">
                               {reseller.username}
                             </div>
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                         {formatDate(reseller.registrationDate)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900 font-medium">
+                        <div className="text-sm font-medium text-green-500">
                           {reseller.credits}
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                         {reseller.totalKeys || 0}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <Badge variant={reseller.isActive ? "success" : "secondary"}>
+                        <Badge 
+                          variant={reseller.isActive ? "outline" : "secondary"}
+                          className={reseller.isActive ? "border-green-500 bg-green-500/10 text-green-500" : ""}
+                        >
                           {reseller.isActive ? "Active" : "Suspended"}
                         </Badge>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-red-600 hover:text-red-900"
-                            onClick={() => handleToggleStatus(reseller.id, reseller.isActive)}
-                            disabled={toggleStatusMutation.isPending}
-                          >
-                            {reseller.isActive ? (
-                              <>
-                                <Ban className="h-4 w-4 mr-1" /> Suspend
-                              </>
-                            ) : (
-                              "Activate"
-                            )}
-                          </Button>
-                        </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className={reseller.isActive 
+                            ? "border-red-500 bg-red-500/10 hover:bg-red-500/20 text-red-500" 
+                            : "border-green-500 bg-green-500/10 hover:bg-green-500/20 text-green-500"}
+                          onClick={() => handleToggleStatus(reseller.id, reseller.isActive)}
+                          disabled={toggleStatusMutation.isPending}
+                        >
+                          {reseller.isActive ? (
+                            <>
+                              <Ban className="h-4 w-4 mr-1" /> Suspend
+                            </>
+                          ) : (
+                            "Activate"
+                          )}
+                        </Button>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">
+                    <td colSpan={6} className="px-6 py-4 text-center text-sm text-muted-foreground">
                       No resellers found
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
+          </div>
+          
+          {/* Mobile Card View */}
+          <div className="md:hidden space-y-4 p-4">
+            {isLoading ? (
+              <div className="py-8 text-center">
+                <div className="animate-spin h-8 w-8 border-t-2 border-purple-500 rounded-full mx-auto"></div>
+                <p className="mt-3 text-muted-foreground">Loading resellers...</p>
+              </div>
+            ) : resellers && resellers.length > 0 ? (
+              resellers.map((reseller) => (
+                <Card key={reseller.id} className="overflow-hidden border border-purple-500/20 shadow-sm">
+                  <CardContent className="p-0">
+                    <div className="flex items-center border-b border-border p-4">
+                      <div className="h-10 w-10 bg-purple-900/30 rounded-full flex items-center justify-center border border-purple-500/20 mr-3">
+                        <span className="text-purple-400 font-medium">
+                          {reseller.username.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <div className="font-medium">{reseller.username}</div>
+                        <div className="text-xs text-muted-foreground">Joined {formatDate(reseller.registrationDate)}</div>
+                      </div>
+                      <Badge 
+                        variant={reseller.isActive ? "outline" : "secondary"}
+                        className={`ml-auto ${reseller.isActive ? "border-green-500 bg-green-500/10 text-green-500" : ""}`}
+                      >
+                        {reseller.isActive ? "Active" : "Suspended"}
+                      </Badge>
+                    </div>
+                    <div className="grid grid-cols-2 divide-x divide-border">
+                      <div className="p-3 text-center">
+                        <div className="text-xs text-muted-foreground">Credits</div>
+                        <div className="font-medium text-green-500">{reseller.credits}</div>
+                      </div>
+                      <div className="p-3 text-center">
+                        <div className="text-xs text-muted-foreground">Total Keys</div>
+                        <div className="font-medium">{reseller.totalKeys || 0}</div>
+                      </div>
+                    </div>
+                    <div className="p-3 border-t border-border">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className={`w-full ${reseller.isActive 
+                          ? "border-red-500 bg-red-500/10 hover:bg-red-500/20 text-red-500" 
+                          : "border-green-500 bg-green-500/10 hover:bg-green-500/20 text-green-500"}`}
+                        onClick={() => handleToggleStatus(reseller.id, reseller.isActive)}
+                        disabled={toggleStatusMutation.isPending}
+                      >
+                        {reseller.isActive ? (
+                          <>
+                            <Ban className="h-4 w-4 mr-2" /> Suspend Account
+                          </>
+                        ) : (
+                          "Activate Account"
+                        )}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <div className="py-8 text-center text-muted-foreground">
+                <p>No resellers found</p>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
