@@ -35,7 +35,7 @@ AestrialHack is configured to deploy easily on Render with minimal setup.
 3. Configure the following settings:
    - **Name**: Choose a name for your service (e.g., `aestrialhack`)
    - **Environment**: Node
-   - **Build Command**: `npm install && npm run build`
+   - **Build Command**: `npm install && chmod +x ./deploy.sh && ./deploy.sh`
    - **Start Command**: `npm start`
 4. Add the following environment variables:
    - `NODE_ENV`: `production`
@@ -46,7 +46,7 @@ AestrialHack is configured to deploy easily on Render with minimal setup.
    - Mount Path: `/data`
 6. Click **Create Web Service**
 
-Render will automatically build and deploy your application. The JSON data files will be stored on the persistent disk at the `/data` directory.
+Render will automatically build and deploy your application. The JSON data files will be stored on the persistent disk at the `/data` directory. The deployment script ensures that the application's static assets are properly set up for production.
 
 ## Alternative Deployment Method
 
