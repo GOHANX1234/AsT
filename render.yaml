@@ -2,7 +2,7 @@ services:
   - type: web
     name: aestrial-hack
     env: node
-    buildCommand: npm install && npm run build
+    buildCommand: npm install && chmod +x ./deploy.sh && ./deploy.sh
     startCommand: npm start
     envVars:
       - key: NODE_ENV
