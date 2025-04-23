@@ -72,18 +72,18 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <Card className="max-w-md w-full border border-purple-500/20 shadow-lg shadow-purple-500/10">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 bg-gradient-to-br from-background via-background to-purple-950/20">
+      <Card className="max-w-md w-full border border-purple-500/30 shadow-xl shadow-purple-500/10 backdrop-blur-sm bg-background/80">
         <CardContent className="pt-6">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-semibold text-primary bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">AestrialHack</h1>
+            <h1 className="text-4xl font-bold text-primary bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent pb-1">AestrialHack</h1>
             <p className="text-muted-foreground mt-2">Professional License Management</p>
           </div>
 
           <Tabs defaultValue="admin" onValueChange={(value) => setActiveTab(value as "admin" | "reseller")}>
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="admin">Admin Login</TabsTrigger>
-              <TabsTrigger value="reseller">Reseller Login</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 mb-2 bg-background/50 border border-purple-500/20">
+              <TabsTrigger value="admin" className="data-[state=active]:bg-purple-900/30 data-[state=active]:text-purple-300 data-[state=active]:shadow-none">Admin Login</TabsTrigger>
+              <TabsTrigger value="reseller" className="data-[state=active]:bg-purple-900/30 data-[state=active]:text-purple-300 data-[state=active]:shadow-none">Reseller Login</TabsTrigger>
             </TabsList>
 
             <TabsContent value="admin">

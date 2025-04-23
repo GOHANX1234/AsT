@@ -98,19 +98,20 @@ export default function ResellerLayout({ children }: ResellerLayoutProps) {
                     <ul className="space-y-2">
                       {navItems.map((item) => (
                         <li key={item.href}>
-                          <Link href={item.href}>
-                            <a 
-                              className={`flex items-center px-4 py-2 rounded-md text-sm ${
-                                item.active
-                                  ? "bg-purple-900/30 text-purple-300 font-medium"
-                                  : "text-foreground hover:bg-muted"
-                              }`}
-                              onClick={() => setMobileMenuOpen(false)}
-                            >
-                              {item.icon}
-                              {item.title}
-                            </a>
-                          </Link>
+                          <div 
+                            className={`flex items-center px-4 py-2 rounded-md text-sm cursor-pointer ${
+                              item.active
+                                ? "bg-purple-900/30 text-purple-300 font-medium"
+                                : "text-foreground hover:bg-muted"
+                            }`}
+                            onClick={() => {
+                              setMobileMenuOpen(false);
+                              window.location.href = item.href;
+                            }}
+                          >
+                            {item.icon}
+                            {item.title}
+                          </div>
                         </li>
                       ))}
                     </ul>
@@ -129,18 +130,19 @@ export default function ResellerLayout({ children }: ResellerLayoutProps) {
             <ul className="space-y-2">
               {navItems.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href}>
-                    <a
-                      className={`flex items-center px-4 py-2 rounded-md ${
-                        item.active
-                          ? "bg-purple-900/30 text-purple-300 font-medium border border-purple-500/20"
-                          : "text-foreground hover:bg-muted"
-                      }`}
-                    >
-                      {item.icon}
-                      {item.title}
-                    </a>
-                  </Link>
+                  <div
+                    className={`flex items-center px-4 py-2 rounded-md cursor-pointer ${
+                      item.active
+                        ? "bg-purple-900/30 text-purple-300 font-medium border border-purple-500/20"
+                        : "text-foreground hover:bg-muted"
+                    }`}
+                    onClick={() => {
+                      window.location.href = item.href;
+                    }}
+                  >
+                    {item.icon}
+                    {item.title}
+                  </div>
                 </li>
               ))}
             </ul>
