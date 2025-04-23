@@ -34,7 +34,7 @@ const generateKeySchema = z.object({
   game: z.string().min(1, "Game selection is required"),
   deviceLimit: z.string().min(1, "Device limit is required"),
   expiryDate: z.string().min(1, "Expiry date is required"),
-  keyCount: z.string().transform((val) => parseInt(val, 10)),
+  keyCount: z.number().default(1),
   customKey: z.string().optional(),
 });
 
@@ -55,7 +55,7 @@ export default function ResellerGenerate() {
       game: "",
       deviceLimit: "1",
       expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().substring(0, 10), // 30 days from now
-      keyCount: "1",
+      keyCount: 1,
       customKey: "",
     },
   });
@@ -217,7 +217,8 @@ export default function ResellerGenerate() {
                           type="number"
                           min="1"
                           max="100"
-                          {...field}
+                          value={field.value.toString()}
+                          onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
                         />
                       </FormControl>
                       <FormMessage />
