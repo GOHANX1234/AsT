@@ -5,20 +5,72 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Copy, Check, Code, Webhook } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function AdminApi() {
+  const [copiedSection, setCopiedSection] = useState<string | null>(null);
+  
+  const copyToClipboard = (text: string, section: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedSection(section);
+      setTimeout(() => setCopiedSection(null), 2000);
+    });
+  };
+
   return (
     <AdminLayout>
-      <h2 className="text-2xl font-semibold mb-6">API Documentation</h2>
+      <div className="space-y-2 mb-6">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent">API Documentation</h2>
+        <p className="text-muted-foreground text-sm">Integration guide for verifying license keys</p>
+      </div>
       
-      <Card className="overflow-hidden mb-6">
-        <CardHeader className="px-6 py-4 border-b border-gray-200">
-          <CardTitle className="text-base font-medium">Key Verification Endpoint</CardTitle>
-        </CardHeader>
-        <CardContent className="p-6">
-          <h4 className="text-lg font-medium mb-2">Request</h4>
-          <div className="bg-muted/40 p-4 rounded-md mb-4">
-            <pre className="font-mono text-sm overflow-x-auto">
+      <div className="grid gap-6">
+        <Card className="overflow-hidden border border-purple-500/20 shadow-lg shadow-purple-500/5">
+          <CardHeader className="px-6 py-4 border-b border-border bg-gradient-to-r from-purple-900/20 to-indigo-900/20">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base font-medium bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent flex items-center">
+                <Webhook className="h-4 w-4 mr-2 text-purple-400" /> Key Verification Endpoint
+              </CardTitle>
+              <div className="text-xs text-muted-foreground rounded-full bg-muted px-2 py-1">
+                POST /api/verify
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4 sm:p-6">
+            <Tabs defaultValue="request" className="w-full">
+              <TabsList className="grid w-full grid-cols-2 mb-4">
+                <TabsTrigger value="request">Request</TabsTrigger>
+                <TabsTrigger value="response">Response</TabsTrigger>
+              </TabsList>
+              <TabsContent value="request" className="space-y-4">
+                <div className="relative bg-muted/40 p-4 rounded-md">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="absolute top-2 right-2 h-8 bg-muted/80"
+                    onClick={() => copyToClipboard(`POST /api/verify
+Content-Type: application/json
+
+{
+  "key": "YOUR_LICENSE_KEY",
+  "deviceId": "UNIQUE_DEVICE_IDENTIFIER",
+  "game": "GAME_NAME"
+}`, "request")}
+                  >
+                    {copiedSection === "request" ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 mr-1 text-green-500" /> Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5 mr-1" /> Copy
+                      </>
+                    )}
+                  </Button>
+                  <pre className="font-mono text-sm overflow-x-auto whitespace-pre-wrap">
 {`POST /api/verify
 Content-Type: application/json
 
@@ -27,31 +79,145 @@ Content-Type: application/json
   "deviceId": "UNIQUE_DEVICE_IDENTIFIER",
   "game": "GAME_NAME"
 }`}
-            </pre>
-          </div>
-          
-          <h4 className="text-lg font-medium mb-2">Response</h4>
-          <div className="bg-muted/40 p-4 rounded-md">
-            <pre className="font-mono text-sm overflow-x-auto">
+                  </pre>
+                </div>
+                <div className="bg-purple-900/10 rounded-md p-4 space-y-2 border border-purple-500/20">
+                  <h4 className="text-sm font-semibold text-purple-400">Request Parameters</h4>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">key</span>
+                      <span>Your license key string</span>
+                    </li>
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">deviceId</span>
+                      <span>Unique identifier for the device (such as HWID or device fingerprint)</span>
+                    </li>
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">game</span>
+                      <span>Game name (PUBG MOBILE, LAST ISLAND OF SURVIVAL, STANDOFF2)</span>
+                    </li>
+                  </ul>
+                </div>
+              </TabsContent>
+              <TabsContent value="response" className="space-y-4">
+                <div className="relative bg-muted/40 p-4 rounded-md">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="absolute top-2 right-2 h-8 bg-muted/80"
+                    onClick={() => copyToClipboard(`{
+  "valid": true,
+  "expiry": "2025-12-31",
+  "deviceLimit": 2,
+  "currentDevices": 1,
+  "message": "License valid"
+}`, "response")}
+                  >
+                    {copiedSection === "response" ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 mr-1 text-green-500" /> Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5 mr-1" /> Copy
+                      </>
+                    )}
+                  </Button>
+                  <pre className="font-mono text-sm overflow-x-auto whitespace-pre-wrap">
 {`{
   "valid": true,
-  "expiry": "2023-12-31",
+  "expiry": "2025-12-31",
   "deviceLimit": 2,
   "currentDevices": 1,
   "message": "License valid"
 }`}
-            </pre>
-          </div>
-        </CardContent>
-      </Card>
-      
-      <Card className="overflow-hidden">
-        <CardHeader className="px-6 py-4 border-b border-gray-200">
-          <CardTitle className="text-base font-medium">Implementation Example</CardTitle>
-        </CardHeader>
-        <CardContent className="p-6">
-          <div className="bg-muted/40 p-4 rounded-md">
-            <pre className="font-mono text-sm overflow-x-auto">
+                  </pre>
+                </div>
+                <div className="bg-purple-900/10 rounded-md p-4 space-y-2 border border-purple-500/20">
+                  <h4 className="text-sm font-semibold text-purple-400">Response Fields</h4>
+                  <ul className="space-y-2 text-sm">
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">valid</span>
+                      <span>Boolean indicating if the license is valid and active</span>
+                    </li>
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">expiry</span>
+                      <span>Expiration date of the license in ISO format</span>
+                    </li>
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">deviceLimit</span>
+                      <span>Maximum number of devices allowed for this key</span>
+                    </li>
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">currentDevices</span>
+                      <span>Current number of devices registered to this key</span>
+                    </li>
+                    <li className="flex">
+                      <span className="font-mono text-xs bg-purple-900/20 px-1.5 rounded text-purple-400 self-start mt-0.5 mr-2">message</span>
+                      <span>Human-readable status message</span>
+                    </li>
+                  </ul>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
+        
+        <Card className="overflow-hidden border border-purple-500/20 shadow-lg shadow-purple-500/5">
+          <CardHeader className="px-6 py-4 border-b border-border bg-gradient-to-r from-purple-900/20 to-indigo-900/20">
+            <CardTitle className="text-base font-medium bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent flex items-center">
+              <Code className="h-4 w-4 mr-2 text-purple-400" /> Implementation Example
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 sm:p-6">
+            <div className="relative bg-muted/40 p-4 rounded-md">
+              <Button
+                variant="outline"
+                size="sm"
+                className="absolute top-2 right-2 h-8 bg-muted/80"
+                onClick={() => copyToClipboard(`// Example JavaScript Implementation
+async function verifyLicense(licenseKey, deviceId, game) {
+  try {
+    const response = await fetch('https://yourdomain.com/api/verify', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        key: licenseKey,
+        deviceId: deviceId,
+        game: game
+      }),
+    });
+    
+    const data = await response.json();
+    
+    if (data.valid) {
+      // License is valid, proceed with application
+      console.log('License valid until:', data.expiry);
+      return true;
+    } else {
+      // License invalid
+      console.error('License error:', data.message);
+      return false;
+    }
+  } catch (error) {
+    console.error('Verification error:', error);
+    return false;
+  }
+}`, "implementation")}
+              >
+                {copiedSection === "implementation" ? (
+                  <>
+                    <Check className="h-3.5 w-3.5 mr-1 text-green-500" /> Copied
+                  </>
+                ) : (
+                  <>
+                    <Copy className="h-3.5 w-3.5 mr-1" /> Copy
+                  </>
+                )}
+              </Button>
+              <pre className="font-mono text-sm overflow-x-auto whitespace-pre-wrap">
 {`// Example JavaScript Implementation
 async function verifyLicense(licenseKey, deviceId, game) {
   try {
@@ -83,10 +249,25 @@ async function verifyLicense(licenseKey, deviceId, game) {
     return false;
   }
 }`}
-            </pre>
-          </div>
-        </CardContent>
-      </Card>
+              </pre>
+            </div>
+            
+            <div className="mt-4 p-4 bg-amber-900/10 border border-amber-500/20 rounded-md">
+              <h4 className="text-sm font-semibold text-amber-400 flex items-center mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 mr-2">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                Important Note
+              </h4>
+              <p className="text-sm text-muted-foreground">
+                Replace <span className="font-mono text-xs bg-amber-900/20 px-1.5 py-0.5 rounded text-amber-400">yourdomain.com</span> with your actual API endpoint. Make sure to implement appropriate error handling and retry logic in production applications.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </AdminLayout>
   );
 }
