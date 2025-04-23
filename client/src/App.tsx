@@ -46,12 +46,30 @@ function Router() {
 function App() {
   // Set dark mode on component mount
   useEffect(() => {
+    // Apply dark mode forcefully
     document.documentElement.classList.add('dark');
+    document.body.classList.add('dark');
+    document.documentElement.style.colorScheme = 'dark';
+    
+    // Ensure dark mode persists
+    const observer = new MutationObserver(() => {
+      if (!document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.add('dark');
+      }
+      if (!document.body.classList.contains('dark')) {
+        document.body.classList.add('dark');
+      }
+    });
+    
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    
+    return () => observer.disconnect();
   }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark" attribute="class">
+      <ThemeProvider defaultTheme="dark" attribute="class" forcedTheme="dark">
         <TooltipProvider>
           <AuthProvider>
             <Toaster />

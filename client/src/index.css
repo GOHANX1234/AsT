@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Force dark mode for all browsers */
+html {
+  color-scheme: dark !important;
+}
+
 :root {
   /* Light theme colors (not used as we're enforcing dark mode) */
   --background: 0 0% 100%;
@@ -26,7 +31,8 @@
   --radius: 0.5rem;
 }
 
-.dark {
+/* Apply dark theme by default without .dark class */
+:root {
   /* Dark theme with black and purple */
   --background: 240 10% 3.9%; /* Near black */
   --foreground: 0 0% 98%;
@@ -50,6 +56,7 @@
   --radius: 0.5rem;
 }
 
+/* Apply styles to all elements to support the dark theme scheme */
 @layer base {
   * {
     @apply border-border;
@@ -58,5 +65,72 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
   }
+  
+  /* Force background colors for all key components */
+  .card,
+  .popover,
+  .sheet,
+  .dialog,
+  .dropdown-menu,
+  .select,
+  .button,
+  .input {
+    @apply bg-background border-border text-foreground !important;
+  }
+  
+  /* Add purple glow to buttons and interactive elements */
+  .button:hover,
+  .link:hover,
+  .card:hover {
+    box-shadow: 0 0 8px 2px rgba(149, 76, 233, 0.2);
+  }
+  
+  /* Make text in cards more visible */
+  .card-title {
+    @apply text-foreground font-semibold;
+  }
+  
+  /* Add gradient text effect to headings */
+  h1, h2, h3 {
+    @apply bg-gradient-to-r from-purple-400 to-indigo-500 bg-clip-text text-transparent;
+  }
+}
+
+/* Mobile responsiveness enhancements */
+@media (max-width: 768px) {
+  .grid {
+    @apply grid-cols-1 gap-4;
+  }
+  
+  .flex {
+    @apply flex-wrap;
+  }
+  
+  .card {
+    @apply w-full;
+  }
+  
+  h1, h2 {
+    @apply text-xl;
+  }
+  
+  .p-6 {
+    @apply p-3;
+  }
+}
+
+/* Gradient background for special elements */
+.bg-gradient {
+  background: linear-gradient(135deg, rgba(76, 29, 149, 0.2) 0%, rgba(91, 33, 182, 0.1) 100%);
+}
+
+/* Glow effect for important UI elements */
+.glow {
+  box-shadow: 0 0 15px 2px rgba(149, 76, 233, 0.3);
+  transition: all 0.3s ease;
+}
+
+.glow:hover {
+  box-shadow: 0 0 20px 5px rgba(149, 76, 233, 0.5);
 }
 

@@ -245,47 +245,48 @@ export default function ResellerGenerate() {
                 />
               </div>
 
-              <Alert className="bg-yellow-50 text-yellow-800 border-yellow-200">
-                <Info className="h-4 w-4 text-yellow-800" />
-                <AlertTitle>Cost Information</AlertTitle>
-                <AlertDescription>
-                  Cost per key: <span className="font-medium">1 credit</span>. You have{" "}
-                  <span className="font-medium">{profile?.credits || 0}</span> credits available.
+              <Alert className="bg-purple-900/30 text-purple-100 border border-purple-500/30">
+                <Info className="h-4 w-4 text-purple-400" />
+                <AlertTitle className="text-purple-300 font-bold">Cost Information</AlertTitle>
+                <AlertDescription className="text-purple-100">
+                  Cost per key: <span className="font-medium text-white">1 credit</span>. You have{" "}
+                  <span className="font-medium text-white">{profile?.credits || 0}</span> credits available.
                 </AlertDescription>
               </Alert>
 
               <Button
                 type="submit"
-                className="w-full bg-secondary-500 hover:bg-green-600"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white text-lg py-6 glow"
                 disabled={generateKeyMutation.isPending}
               >
                 {generateKeyMutation.isPending
                   ? "Generating..."
-                  : "Generate Keys"}
+                  : "✨ GENERATE KEYS ✨"}
               </Button>
             </form>
           </Form>
 
           {generatedKeys.length > 0 && (
-            <div className="mt-6 p-4 border rounded-md">
-              <h3 className="text-lg font-medium mb-2">Generated Keys:</h3>
-              <div className="space-y-2">
+            <div className="mt-6 p-4 border border-purple-500/30 rounded-md bg-gradient">
+              <h3 className="text-lg font-medium mb-4 text-purple-300">✨ Your Generated Keys:</h3>
+              <div className="space-y-3">
                 {generatedKeys.map((key, index) => (
-                  <div key={index} className="flex items-center">
-                    <code className="flex-1 font-mono text-sm bg-muted p-2 rounded">
+                  <div key={index} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                    <code className="flex-1 font-mono text-sm bg-purple-900/40 text-purple-100 p-3 rounded-md border border-purple-500/20">
                       {key}
                     </code>
                     <Button
                       size="sm"
-                      variant="ghost"
-                      className="ml-2"
+                      variant="outline"
+                      className="border-purple-500/30 text-purple-300 hover:bg-purple-900/40 hover:text-purple-100"
                       onClick={() => copyToClipboard(key)}
                     >
-                      Copy
+                      Copy Key
                     </Button>
                   </div>
                 ))}
               </div>
+              <p className="mt-4 text-xs text-purple-300 opacity-70">Remember to keep your keys secure and share them only with trusted users.</p>
             </div>
           )}
         </CardContent>

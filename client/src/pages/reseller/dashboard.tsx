@@ -36,11 +36,11 @@ export default function ResellerDashboard() {
 
   return (
     <ResellerLayout>
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <h2 className="text-2xl font-semibold">Dashboard Overview</h2>
         <Link href="/reseller/generate">
-          <Button className="bg-purple-600 hover:bg-purple-700 text-white">
-            <PlusCircle className="mr-2 h-4 w-4" /> Generate New Key
+          <Button className="bg-purple-600 hover:bg-purple-700 text-white py-6 px-8 w-full md:w-auto text-lg glow">
+            <PlusCircle className="mr-2 h-6 w-6" /> ✨ GENERATE NEW KEY ✨
           </Button>
         </Link>
       </div>

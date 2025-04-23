@@ -14,8 +14,17 @@ import session from "express-session";
 import MemoryStore from "memorystore";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import fs from "fs";
+import path from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Ensure data directory exists for reseller files
+  const dataDir = path.join('.', 'data');
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+    console.log('Created data directory for reseller files');
+  }
+
   // Set up session middleware
   const SessionStore = MemoryStore(session);
   app.use(
