@@ -10,6 +10,7 @@ import Login from "@/pages/login";
 import Register from "@/pages/register";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminResellers from "@/pages/admin/resellers";
+import AdminResellerKeys from "@/pages/admin/reseller-keys";
 import AdminTokens from "@/pages/admin/tokens";
 import AdminApi from "@/pages/admin/api";
 import ResellerDashboard from "@/pages/reseller/dashboard";
@@ -29,6 +30,7 @@ function Router() {
       {/* Admin pages */}
       <ProtectedRoute path="/admin" component={AdminDashboard} role="admin" />
       <ProtectedRoute path="/admin/resellers" component={AdminResellers} role="admin" />
+      <ProtectedRoute path="/admin/resellers/:id/keys" component={AdminResellerKeys} role="admin" />
       <ProtectedRoute path="/admin/tokens" component={AdminTokens} role="admin" />
       <ProtectedRoute path="/admin/api" component={AdminApi} role="admin" />
       

@@ -154,23 +154,33 @@ export default function AdminResellers() {
                         </Badge>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className={reseller.isActive 
-                            ? "border-red-500 bg-red-500/10 hover:bg-red-500/20 text-red-500" 
-                            : "border-green-500 bg-green-500/10 hover:bg-green-500/20 text-green-500"}
-                          onClick={() => handleToggleStatus(reseller.id, reseller.isActive)}
-                          disabled={toggleStatusMutation.isPending}
-                        >
-                          {reseller.isActive ? (
-                            <>
-                              <Ban className="h-4 w-4 mr-1" /> Suspend
-                            </>
-                          ) : (
-                            "Activate"
-                          )}
-                        </Button>
+                        <div className="flex space-x-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="border-purple-500 bg-purple-500/10 hover:bg-purple-500/20 text-purple-500"
+                            onClick={() => navigate(`/admin/resellers/${reseller.id}/keys`)}
+                          >
+                            <Key className="h-4 w-4 mr-1" /> Keys
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className={reseller.isActive 
+                              ? "border-red-500 bg-red-500/10 hover:bg-red-500/20 text-red-500" 
+                              : "border-green-500 bg-green-500/10 hover:bg-green-500/20 text-green-500"}
+                            onClick={() => handleToggleStatus(reseller.id, reseller.isActive)}
+                            disabled={toggleStatusMutation.isPending}
+                          >
+                            {reseller.isActive ? (
+                              <>
+                                <Ban className="h-4 w-4 mr-1" /> Suspend
+                              </>
+                            ) : (
+                              "Activate"
+                            )}
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -223,22 +233,30 @@ export default function AdminResellers() {
                         <div className="font-medium">{reseller.totalKeys || 0}</div>
                       </div>
                     </div>
-                    <div className="p-3 border-t border-border">
+                    <div className="p-3 border-t border-border grid grid-cols-2 gap-2">
                       <Button
                         variant="outline"
                         size="sm"
-                        className={`w-full ${reseller.isActive 
+                        className="border-purple-500 bg-purple-500/10 hover:bg-purple-500/20 text-purple-500"
+                        onClick={() => navigate(`/admin/resellers/${reseller.id}/keys`)}
+                      >
+                        <Key className="h-4 w-4 mr-2" /> View Keys
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className={reseller.isActive 
                           ? "border-red-500 bg-red-500/10 hover:bg-red-500/20 text-red-500" 
-                          : "border-green-500 bg-green-500/10 hover:bg-green-500/20 text-green-500"}`}
+                          : "border-green-500 bg-green-500/10 hover:bg-green-500/20 text-green-500"}
                         onClick={() => handleToggleStatus(reseller.id, reseller.isActive)}
                         disabled={toggleStatusMutation.isPending}
                       >
                         {reseller.isActive ? (
                           <>
-                            <Ban className="h-4 w-4 mr-2" /> Suspend Account
+                            <Ban className="h-4 w-4 mr-2" /> Suspend
                           </>
                         ) : (
-                          "Activate Account"
+                          "Activate"
                         )}
                       </Button>
                     </div>
