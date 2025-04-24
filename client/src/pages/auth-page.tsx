@@ -132,7 +132,7 @@ export default function AuthPage() {
 
             {/* Login Content */}
             <TabsContent value="login">
-              <Card className="border-purple-500/20 bg-black/60 shadow-xl shadow-purple-900/10 form-border-glow rounded-lg">
+              <Card className="border-2 border-purple-500/70 bg-black/60 shadow-xl shadow-purple-900/20 form-border-glow rounded-lg">
                 <CardHeader className="space-y-1">
                   <CardTitle className="text-2xl font-bold text-white stable-text">Welcome Back</CardTitle>
                   <CardDescription className="text-gray-400 stable-text">Login to manage your license keys</CardDescription>
@@ -252,7 +252,7 @@ export default function AuthPage() {
 
             {/* Register Content */}
             <TabsContent value="register">
-              <Card className="border-purple-500/20 bg-black/60 shadow-xl shadow-purple-900/10 form-border-glow rounded-lg">
+              <Card className="border-2 border-purple-500/70 bg-black/60 shadow-xl shadow-purple-900/20 form-border-glow rounded-lg">
                 <CardHeader className="space-y-1">
                   <CardTitle className="text-2xl font-bold text-white stable-text">Create Account</CardTitle>
                   <CardDescription className="text-gray-400 stable-text">Register as a reseller using your referral token</CardDescription>
