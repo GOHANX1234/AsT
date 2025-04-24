@@ -58,7 +58,7 @@ export default function AddCreditModal({
   const isMobile = useIsMobile();
 
   // Fetch resellers
-  const { data: resellers = [] } = useQuery({
+  const { data: resellers = [] } = useQuery<any[]>({
     queryKey: ['/api/admin/resellers'],
     enabled: open,
   });

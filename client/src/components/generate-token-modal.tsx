@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import {
   Dialog,
@@ -10,6 +11,13 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import {
+  MobileDialog,
+  MobileDialogContent,
+  MobileDialogHeader,
+  MobileDialogTitle,
+  MobileDialogDescription,
+} from "@/components/ui/mobile-dialog";
 import { Button } from "@/components/ui/button";
 
 interface GenerateTokenModalProps {
@@ -22,6 +30,7 @@ export default function GenerateTokenModal({
   onOpenChange,
 }: GenerateTokenModalProps) {
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   // Generate token mutation
   const generateTokenMutation = useMutation({
@@ -61,6 +70,38 @@ export default function GenerateTokenModal({
     generateTokenMutation.mutate();
   };
 
+  // Button content that's common to both dialog types
+  const buttonContent = (
+    <div className="mt-4">
+      <Button
+        className="w-full"
+        onClick={handleGenerateToken}
+        disabled={generateTokenMutation.isPending}
+      >
+        {generateTokenMutation.isPending ? "Generating..." : "Generate Token"}
+      </Button>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <MobileDialog open={open} onOpenChange={onOpenChange}>
+        <MobileDialogContent>
+          <MobileDialogHeader>
+            <MobileDialogTitle>Generate Referral Token</MobileDialogTitle>
+            <MobileDialogDescription>
+              Generate a new referral token that can be used to register a reseller account.
+              The token will be copied to your clipboard.
+            </MobileDialogDescription>
+          </MobileDialogHeader>
+          <div className="p-4">
+            {buttonContent}
+          </div>
+        </MobileDialogContent>
+      </MobileDialog>
+    );
+  }
+  
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
@@ -71,16 +112,7 @@ export default function GenerateTokenModal({
             The token will be copied to your clipboard.
           </DialogDescription>
         </DialogHeader>
-
-        <div className="mt-4">
-          <Button
-            className="w-full"
-            onClick={handleGenerateToken}
-            disabled={generateTokenMutation.isPending}
-          >
-            {generateTokenMutation.isPending ? "Generating..." : "Generate Token"}
-          </Button>
-        </div>
+        {buttonContent}
       </DialogContent>
     </Dialog>
   );
