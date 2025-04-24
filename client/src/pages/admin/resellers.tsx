@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { queryClient } from "@/lib/queryClient";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
@@ -14,10 +15,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatDate } from "@/lib/utils";
-import { PlusCircle, Edit, Ban } from "lucide-react";
+import { PlusCircle, Edit, Ban, Key } from "lucide-react";
 
 export default function AdminResellers() {
   const { toast } = useToast();
+  const [, navigate] = useLocation();
   const [addCreditModalOpen, setAddCreditModalOpen] = useState(false);
 
   // Fetch resellers

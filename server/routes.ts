@@ -355,6 +355,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: error.message });
     }
   });
+  
+  // Get all keys for a specific reseller (admin view)
+  app.get('/api/admin/resellers/:id/keys', isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const resellerId = parseInt(req.params.id);
+      if (isNaN(resellerId)) {
+        return res.status(400).json({ message: 'Invalid reseller ID' });
+      }
+      
+      const keys = await storage.getKeysByResellerId(resellerId);
+      
+      // Get device counts for each key
+      const keysWithDevices = await Promise.all(keys.map(async key => {
+        const devices = await storage.getDevicesByKeyId(key.id);
+        const now = new Date();
+        let status = key.isRevoked ? "REVOKED" : 
+                    (new Date(key.expiryDate) <= now ? "EXPIRED" : "ACTIVE");
+        
+        return {
+          ...key,
+          deviceCount: devices.length,
+          status,
+          devices: devices
+        };
+      }));
+      
+      res.json(keysWithDevices);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Admin route to revoke/delete a key
+  app.delete('/api/admin/keys/:id', isAuthenticated, isAdmin, async (req, res) => {
+    try {
+      const keyId = parseInt(req.params.id);
+      if (isNaN(keyId)) {
+        return res.status(400).json({ message: 'Invalid key ID' });
+      }
+      
+      const revokedKey = await storage.revokeKey(keyId);
+      if (!revokedKey) {
+        return res.status(404).json({ message: 'Key not found' });
+      }
+      
+      res.json({ success: true, message: 'Key revoked successfully', key: revokedKey });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  });
 
   app.post('/api/admin/resellers/credits', isAdmin, async (req, res) => {
     try {
