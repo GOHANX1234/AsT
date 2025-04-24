@@ -181,11 +181,11 @@ export default function AuthPage() {
                           <FormItem className="space-y-1">
                             <FormLabel className="text-gray-300">Username</FormLabel>
                             <FormControl>
-                              <div className="relative border-glow rounded-md overflow-hidden">
-                                <UserCheck className="absolute left-3 top-2.5 h-5 w-5 text-purple-400" />
+                              <div className="relative input-border-glow rounded-md">
+                                <UserCheck className="absolute left-3 top-2.5 h-5 w-5 text-purple-400 z-10" />
                                 <Input 
                                   placeholder="Enter your username" 
-                                  className="pl-10 bg-black/70 backdrop-blur-sm border-purple-500/30 focus-visible:ring-purple-500/40 shadow-inner focus-visible:border-purple-500 transition-all rounded-md" 
+                                  className="pl-10 bg-black/90 border-transparent focus-visible:border-transparent focus-visible:ring-0 shadow-inner transition-all rounded-md" 
                                   {...field} 
                                 />
                               </div>
@@ -202,12 +202,12 @@ export default function AuthPage() {
                           <FormItem className="space-y-1">
                             <FormLabel className="text-gray-300">Password</FormLabel>
                             <FormControl>
-                              <div className="relative border-glow rounded-md overflow-hidden">
-                                <Lock className="absolute left-3 top-2.5 h-5 w-5 text-purple-400" />
+                              <div className="relative input-border-glow rounded-md">
+                                <Lock className="absolute left-3 top-2.5 h-5 w-5 text-purple-400 z-10" />
                                 <Input 
                                   type="password" 
                                   placeholder="Enter your password" 
-                                  className="pl-10 bg-black/70 backdrop-blur-sm border-purple-500/30 focus-visible:ring-purple-500/40 shadow-inner focus-visible:border-purple-500 transition-all rounded-md" 
+                                  className="pl-10 bg-black/90 border-transparent focus-visible:border-transparent focus-visible:ring-0 shadow-inner transition-all rounded-md" 
                                   {...field} 
                                 />
                               </div>
@@ -267,11 +267,11 @@ export default function AuthPage() {
                           <FormItem className="space-y-1">
                             <FormLabel className="text-gray-300">Username</FormLabel>
                             <FormControl>
-                              <div className="relative border-glow rounded-md overflow-hidden">
-                                <User className="absolute left-3 top-2.5 h-5 w-5 text-purple-400" />
+                              <div className="relative input-border-glow rounded-md">
+                                <User className="absolute left-3 top-2.5 h-5 w-5 text-purple-400 z-10" />
                                 <Input 
                                   placeholder="Choose a username" 
-                                  className="pl-10 bg-black/70 backdrop-blur-sm border-purple-500/30 focus-visible:ring-purple-500/40 shadow-inner focus-visible:border-purple-500 transition-all rounded-md"
+                                  className="pl-10 bg-black/90 border-transparent focus-visible:border-transparent focus-visible:ring-0 shadow-inner transition-all rounded-md"
                                   {...field} 
                                 />
                               </div>
@@ -288,12 +288,12 @@ export default function AuthPage() {
                           <FormItem className="space-y-1">
                             <FormLabel className="text-gray-300">Password</FormLabel>
                             <FormControl>
-                              <div className="relative border-glow rounded-md overflow-hidden">
-                                <Lock className="absolute left-3 top-2.5 h-5 w-5 text-purple-400" />
+                              <div className="relative input-border-glow rounded-md">
+                                <Lock className="absolute left-3 top-2.5 h-5 w-5 text-purple-400 z-10" />
                                 <Input 
                                   type="password" 
                                   placeholder="Create a password" 
-                                  className="pl-10 bg-black/70 backdrop-blur-sm border-purple-500/30 focus-visible:ring-purple-500/40 shadow-inner focus-visible:border-purple-500 transition-all rounded-md"
+                                  className="pl-10 bg-black/90 border-transparent focus-visible:border-transparent focus-visible:ring-0 shadow-inner transition-all rounded-md"
                                   {...field} 
                                 />
                               </div>
@@ -310,11 +310,11 @@ export default function AuthPage() {
                           <FormItem className="space-y-1">
                             <FormLabel className="text-gray-300">Referral Token</FormLabel>
                             <FormControl>
-                              <div className="relative border-glow rounded-md overflow-hidden">
-                                <MailCheck className="absolute left-3 top-2.5 h-5 w-5 text-purple-400" />
+                              <div className="relative input-border-glow rounded-md">
+                                <MailCheck className="absolute left-3 top-2.5 h-5 w-5 text-purple-400 z-10" />
                                 <Input 
                                   placeholder="Enter your referral token" 
-                                  className="pl-10 bg-black/70 backdrop-blur-sm border-purple-500/30 focus-visible:ring-purple-500/40 shadow-inner focus-visible:border-purple-500 transition-all rounded-md"
+                                  className="pl-10 bg-black/90 border-transparent focus-visible:border-transparent focus-visible:ring-0 shadow-inner transition-all rounded-md"
                                   {...field} 
                                 />
                               </div>
