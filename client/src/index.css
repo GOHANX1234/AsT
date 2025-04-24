@@ -401,7 +401,8 @@ html {
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  animation: input-border-animation 6s linear infinite;
+  animation: none;
+  /* We'll re-enable this animation in the fix below */
 }
 
 @keyframes input-border-animation {
@@ -409,22 +410,71 @@ html {
   100% { background-position: 300% 0%; }
 }
 
-/* Ensure text isn't moving */
-.card-title, .card-description, p, h1, h2, h3, h4, button, label, a, span, div {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Complete fix for moving text */
+body {
+  overflow-x: hidden;
 }
 
-.stable-text {
-  position: relative; 
-  will-change: transform;
-  transform: translateZ(0); 
-  backface-visibility: hidden;
-  translate: none;
-  rotate: none;
-  scale: none;
+/* Stabilize all text elements */
+h1, h2, h3, h4, h5, h6, p, span, div, button, a, label, input, 
+.card-title, .card-description, .text-xs, .text-sm, .text-lg, 
+.text-xl, .text-2xl, .text-3xl, .text-4xl {
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: geometricPrecision !important;
+  letter-spacing: normal !important;
+  will-change: auto !important;
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Only allow animations on specific elements */
+.input-border-glow::before {
+  animation: input-border-animation 6s linear infinite !important;
+}
+
+.hamburger-fade-in {
+  animation: fadeInLeft 0.3s ease-out forwards !important;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite !important;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite !important;
+}
+
+.glow-text {
+  animation: glow 1.5s ease-in-out infinite alternate !important;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px rgba(168, 85, 247, 0.5), 0 0 10px rgba(168, 85, 247, 0.3);
+  }
+  to {
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(168, 85, 247, 0.5);
+  }
 }
 
