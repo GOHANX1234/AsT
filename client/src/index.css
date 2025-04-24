@@ -478,60 +478,136 @@ h1, h2, h3, h4, h5, h6, p, span, div, button, a, label, input,
   }
 }
 
-/* CRITICAL MOBILE DROPDOWN FIXES */
-/* Force fixed positioning on all popover content */
+/* ============================================ */
+/* CRITICAL MOBILE FIXES FOR ALL COMPONENTS */
+/* ============================================ */
+
+/* Force consistent dropdown positioning on mobile */
 @media (max-width: 768px) {
+  /* All dropdown/popover content positioning */
   [data-radix-popper-content-wrapper] {
     position: fixed !important;
-    top: 30% !important;
+    top: 20% !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     z-index: 99999 !important;
     width: 94vw !important;
     max-width: 94vw !important;
-    max-height: 60vh !important;
+    max-height: 70vh !important;
     overflow-y: auto !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
   }
   
-  /* Mobile select positioning fix */
+  /* Select dropdown specific positioning and styling */
   [data-radix-select-content] {
     position: fixed !important;
-    top: 30% !important;
+    top: 20% !important;
     left: 50% !important;
     transform: translateX(-50%) !important;
     width: 94vw !important;
     max-width: 94vw !important;
     z-index: 99999 !important;
-    max-height: 60vh !important;
+    max-height: 70vh !important;
+    border-width: 1px !important;
+    border-color: rgba(168, 85, 247, 0.3) !important;
+    background-color: rgb(10, 10, 15) !important;
   }
   
-  /* Larger touch targets for all dropdown/select items */
+  /* Context menu specific positioning */
+  [data-radix-context-menu-content] {
+    position: fixed !important;
+    top: 20% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 94vw !important;
+    max-width: 94vw !important;
+    z-index: 99999 !important;
+  }
+  
+  /* Increase touch targets for all interactive elements */
   [data-radix-select-item],
-  [role="menuitem"] {
-    min-height: 44px !important;
+  [role="menuitem"],
+  [role="option"],
+  .mobile-touch-target {
+    min-height: 48px !important;
     display: flex !important;
     align-items: center !important;
-    padding: 12px 8px 12px 30px !important;
+    padding: 12px 10px 12px 30px !important;
+    touch-action: manipulation !important;
   }
   
-  /* Text truncation for long items */
-  [data-radix-select-item-text] {
+  /* Ensure text truncation for dropdown items */
+  [data-radix-select-item-text],
+  [role="menuitem"] span {
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     max-width: 85vw !important;
   }
+  
+  /* Improve dialog/modal mobile styling */
+  [role="dialog"] {
+    max-width: 98vw !important;
+    width: 98vw !important;
+    margin: 0 auto !important;
+  }
+  
+  /* Mobile-friendly form elements */
+  input, select, textarea, button {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+    min-height: 44px !important;
+    touch-action: manipulation !important;
+  }
+  
+  /* Improve mobile table layouts */
+  table {
+    display: block !important;
+    max-width: 100vw !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  
+  /* Card improvements for mobile */
+  .card {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
 }
 
-/* Mobile dialog fixes */
+/* Dialog/modal component fixes for all screen sizes */
 [data-state="open"][role="dialog"],
 [data-state="open"][role="alertdialog"] {
   position: fixed !important;
   z-index: 99999 !important;
+  max-height: 95vh !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
 }
 
-/* Fix dialog overlay */
+/* Dialog overlay z-index fix */
 [role="dialog"] > [data-state="open"] {
   z-index: 99998 !important;
+}
+
+/* Make dialogs scrollable on mobile with proper padding */
+[role="dialog"] > [data-state="open"] > div {
+  padding: 16px !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Fix for keyboard focus causing unintended scrolling */
+html, body {
+  overscroll-behavior-y: none !important;
+  position: relative !important;
+  height: 100% !important;
+}
+
+/* Fix for key details dialog specifically */
+.key-details-dialog {
+  width: 100vw !important;
+  max-width: 450px !important;
+  margin: 0 auto !important;
 }
 

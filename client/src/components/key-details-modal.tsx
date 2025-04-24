@@ -1,20 +1,18 @@
-import { useState, useEffect } from "react";
-import { X, Copy, Trash, Check, Smartphone } from "lucide-react";
+import { useState } from "react";
+import { Copy, Trash, Check, Smartphone } from "lucide-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { apiRequest } from "@/lib/queryClient";
 import { formatDate, getStatusColor } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { Key, Device } from "@shared/schema";
+import { Key, Device, KeyStatus } from "@shared/schema";
 
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogClose,
-} from "@/components/ui/dialog";
+  MobileDialog,
+  MobileDialogContent,
+  MobileDialogHeader,
+  MobileDialogTitle,
+} from "@/components/ui/mobile-dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -25,6 +23,12 @@ interface KeyDetailsModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
+// Interface for key details with devices
+interface KeyDetailsWithDevices extends Key {
+  devices: Device[];
+  status: KeyStatus;
+}
+
 export default function KeyDetailsModal({
   keyId,
   open,
@@ -32,11 +36,6 @@ export default function KeyDetailsModal({
 }: KeyDetailsModalProps) {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
-
-  // Interface for key details
-  interface KeyDetailsWithDevices extends Key {
-    devices: Device[];
-  }
 
   // Fetch key details
   const { data: keyDetails, isLoading } = useQuery<KeyDetailsWithDevices>({
@@ -92,14 +91,12 @@ export default function KeyDetailsModal({
     ? getStatusColor(keyDetails.status)
     : { bg: "bg-gray-100", text: "text-gray-800", border: "border-gray-200" };
 
-  const isMobile = useIsMobile();
-  
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto p-0">
-        <DialogHeader className="p-4 border-b">
-          <DialogTitle className="text-lg font-bold">Key Details</DialogTitle>
-        </DialogHeader>
+    <MobileDialog open={open} onOpenChange={onOpenChange}>
+      <MobileDialogContent>
+        <MobileDialogHeader>
+          <MobileDialogTitle>Key Details</MobileDialogTitle>
+        </MobileDialogHeader>
 
         {isLoading ? (
           <div className="py-10 flex justify-center">
@@ -229,7 +226,7 @@ export default function KeyDetailsModal({
             <p>Key details not found</p>
           </div>
         )}
-      </DialogContent>
-    </Dialog>
+      </MobileDialogContent>
+    </MobileDialog>
   );
 }
