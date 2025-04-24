@@ -3,14 +3,20 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
+import {
+  MobileDialog,
+  MobileDialogContent,
+  MobileDialogHeader,
+  MobileDialogTitle,
+} from "@/components/ui/mobile-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -49,6 +55,7 @@ export default function AddCreditModal({
   onOpenChange,
 }: AddCreditModalProps) {
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   // Fetch resellers
   const { data: resellers = [] } = useQuery({
@@ -96,71 +103,89 @@ export default function AddCreditModal({
     addCreditMutation.mutate(values);
   }
 
+  const renderForm = () => (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="resellerId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Select Reseller</FormLabel>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a reseller" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {resellers.map((reseller: any) => (
+                    <SelectItem key={reseller.id} value={reseller.id.toString()}>
+                      {reseller.username} - Current: {reseller.credits} credits
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="amount"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Credit Amount</FormLabel>
+              <FormControl>
+                <Input
+                  type="number"
+                  min="1"
+                  placeholder="Enter amount to add"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button
+          type="submit"
+          className="w-full"
+          disabled={addCreditMutation.isPending}
+        >
+          {addCreditMutation.isPending ? "Adding..." : "Add Credit"}
+        </Button>
+      </form>
+    </Form>
+  );
+
+  if (isMobile) {
+    return (
+      <MobileDialog open={open} onOpenChange={onOpenChange}>
+        <MobileDialogContent>
+          <MobileDialogHeader>
+            <MobileDialogTitle>Add Credit to Reseller</MobileDialogTitle>
+          </MobileDialogHeader>
+          <div className="p-4">
+            {renderForm()}
+          </div>
+        </MobileDialogContent>
+      </MobileDialog>
+    );
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Add Credit to Reseller</DialogTitle>
         </DialogHeader>
-
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="resellerId"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Select Reseller</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a reseller" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {resellers.map((reseller) => (
-                        <SelectItem key={reseller.id} value={reseller.id.toString()}>
-                          {reseller.username} - Current: {reseller.credits} credits
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="amount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Credit Amount</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      min="1"
-                      placeholder="Enter amount to add"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={addCreditMutation.isPending}
-            >
-              {addCreditMutation.isPending ? "Adding..." : "Add Credit"}
-            </Button>
-          </form>
-        </Form>
+        {renderForm()}
       </DialogContent>
     </Dialog>
   );
