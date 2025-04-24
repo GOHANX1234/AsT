@@ -51,7 +51,7 @@ export default function Register() {
       <Card className="max-w-md w-full border border-purple-500/30 shadow-xl shadow-purple-500/10 backdrop-blur-sm bg-background/80 form-border-glow relative z-10">
         <CardContent className="pt-6">
           <div className="text-center mb-8 float">
-            <h1 className="text-4xl font-bold text-primary bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent pb-1 glow-text shine-effect">AestrialHack</h1>
+            <h1 className="text-4xl font-bold text-primary bg-gradient-to-r from-purple-500 to-indigo-600 bg-clip-text text-transparent pb-1 glow-text shine-effect">RU-Nite</h1>
             <p className="text-muted-foreground mt-2">Reseller Registration</p>
           </div>
 
