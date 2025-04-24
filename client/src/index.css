@@ -550,12 +550,24 @@ h1, h2, h3, h4, h5, h6, p, span, div, button, a, label, input,
   /* Context menu specific positioning */
   [data-radix-context-menu-content] {
     position: fixed !important;
-    top: 20% !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 94vw !important;
-    max-width: 94vw !important;
+    top: auto !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    transform: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
     z-index: 99999 !important;
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-width: 1px !important;
+    border-color: rgba(168, 85, 247, 0.3) !important;
+    background: hsl(var(--background)) !important;
+    animation: slideUp 0.2s ease-out !important;
+    max-height: 70vh !important;
+    overflow-y: auto !important;
   }
   
   /* Increase touch targets for all interactive elements */
@@ -643,5 +655,54 @@ html, body {
   width: 100vw !important;
   max-width: 450px !important;
   margin: 0 auto !important;
+}
+
+/* Add special styling for mobile dialogs */
+@media (max-width: 768px) {
+  /* Bottom sheet style for mobile dialogs */
+  .mobile-dialog-content {
+    position: fixed !important;
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    transform: none !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+    max-height: 90vh !important;
+    background-color: hsl(var(--background)) !important;
+    border-color: rgba(139, 92, 246, 0.2) !important;
+    animation: slide-up-mobile 0.3s ease-out !important;
+    padding-bottom: env(safe-area-inset-bottom, 16px) !important;
+    box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.3) !important;
+  }
+  
+  @keyframes slide-up-mobile {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  /* Add handle for mobile sheet dialogs */
+  .mobile-dialog-handle {
+    width: 40px;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 3px;
+    margin: 8px auto 4px auto;
+  }
+  
+  /* Style the mobile dialog header */
+  [class*="MobileDialogHeader"] {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
 }
 
