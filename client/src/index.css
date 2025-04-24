@@ -486,3 +486,20 @@ h1, h2, h3, h4, h5, h6, p, span, div, button, a, label, input,
   position: fixed !important;
 }
 
+/* Fix Select component on mobile */
+[data-radix-select-content] {
+  position: fixed !important;
+  max-width: 90vw !important;
+  width: var(--radix-select-trigger-width);
+  z-index: 200 !important;
+  top: var(--radix-select-content-available-height) !important;
+}
+
+/* Adjust SelectItem text for truncation on mobile */
+[data-radix-select-item] span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 85vw;
+}
+
