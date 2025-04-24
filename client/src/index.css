@@ -271,17 +271,51 @@ html {
   right: -2px;
   bottom: -2px;
   z-index: -1;
-  background: linear-gradient(90deg, 
-    rgba(139, 92, 246, 0.7),
-    rgba(168, 85, 247, 0.9),
-    rgba(139, 92, 246, 0.7),
-    rgba(129, 18, 183, 0.7),
-    rgba(139, 92, 246, 0.7)
-  );
-  background-size: 300% 100%;
+  border: 3px solid #a855f7;
   border-radius: inherit;
-  filter: blur(2px);
-  animation: border-glow-animation 4s ease infinite;
+  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.7));
+  animation: border-rotate 8s linear infinite;
+}
+
+/* Add a pseudo-element for the moving border effect */
+.form-border-glow::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  z-index: -2;
+  border: 3px solid transparent;
+  border-radius: inherit;
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.7);
+}
+
+@keyframes border-rotate {
+  0% {
+    clip-path: inset(0 0 calc(100% - 3px) 0);
+  }
+  12.5% {
+    clip-path: inset(0 0 0 calc(100% - 3px));
+  }
+  25% {
+    clip-path: inset(0 0 0 calc(100% - 3px));
+  }
+  37.5% {
+    clip-path: inset(calc(100% - 3px) 0 0 0);
+  }
+  50% {
+    clip-path: inset(calc(100% - 3px) 0 0 0);
+  }
+  62.5% {
+    clip-path: inset(0 calc(100% - 3px) 0 0);
+  }
+  75% {
+    clip-path: inset(0 calc(100% - 3px) 0 0);
+  }
+  87.5% {
+    clip-path: inset(0 0 calc(100% - 3px) 0);
+  }
+  100% {
+    clip-path: inset(0 0 calc(100% - 3px) 0);
+  }
 }
 
 @keyframes move-glow {
@@ -435,6 +469,10 @@ h1, h2, h3, h4, h5, h6, p, span, div, button, a, label, input,
 /* Only allow animations on specific elements */
 .input-border-glow::before {
   animation: input-border-animation 6s linear infinite !important;
+}
+
+.form-border-glow::before {
+  animation: border-rotate 8s linear infinite !important;
 }
 
 .hamburger-fade-in {
