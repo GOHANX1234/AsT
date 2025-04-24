@@ -1,6 +1,27 @@
 {
   "resellerId": 1,
   "username": "Gohan",
-  "keys": [],
-  "credits": 0
+  "keys": [
+    {
+      "keyString": "Gohan",
+      "game": "LAST ISLAND OF SURVIVAL",
+      "resellerId": 1,
+      "expiryDate": "2025-05-24T10:26:39.758Z",
+      "deviceLimit": 2,
+      "id": 1,
+      "createdAt": "2025-04-24T10:26:40.287Z",
+      "isRevoked": false
+    },
+    {
+      "keyString": "Gohan",
+      "game": "LAST ISLAND OF SURVIVAL",
+      "resellerId": 1,
+      "expiryDate": "2025-05-24T10:26:39.758Z",
+      "deviceLimit": 2,
+      "id": 1,
+      "createdAt": "2025-04-24T10:26:40.287Z",
+      "isRevoked": false
+    }
+  ],
+  "credits": 3
 }

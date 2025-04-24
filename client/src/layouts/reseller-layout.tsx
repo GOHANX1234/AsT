@@ -22,7 +22,7 @@ export default function ResellerLayout({ children }: ResellerLayoutProps) {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const { data: profile } = useQuery({
+  const { data: profile } = useQuery<any>({
     queryKey: ['/api/reseller/profile'],
     enabled: !!user,
   });
@@ -76,7 +76,7 @@ export default function ResellerLayout({ children }: ResellerLayoutProps) {
                   <Menu className="h-5 w-5 text-purple-300" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-[280px] sm:w-[320px] bg-black/90 border-r border-purple-900/30">
+              <SheetContent side="left" className="w-[280px] sm:w-[320px] bg-black/90 border-r border-purple-900/30 z-[100]">
                 <div className="flex flex-col h-full py-6">
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center">
@@ -102,19 +102,20 @@ export default function ResellerLayout({ children }: ResellerLayoutProps) {
                     <ul className="space-y-2">
                       {navItems.map((item) => (
                         <li key={item.href}>
-                          <Link href={item.href}>
-                            <div 
-                              className={`flex items-center px-4 py-3 rounded-md text-sm cursor-pointer transition-colors ${
-                                item.active
-                                  ? "bg-purple-900/30 text-purple-300 font-medium border border-purple-500/20"
-                                  : "text-foreground hover:bg-purple-900/20 hover:text-purple-300"
-                              }`}
-                              onClick={() => setMobileMenuOpen(false)}
-                            >
-                              {item.icon}
-                              {item.title}
-                            </div>
-                          </Link>
+                          <div 
+                            className={`flex items-center px-4 py-3 rounded-md text-sm cursor-pointer transition-colors ${
+                              item.active
+                                ? "bg-purple-900/30 text-purple-300 font-medium border border-purple-500/20"
+                                : "text-foreground hover:bg-purple-900/20 hover:text-purple-300"
+                            }`}
+                            onClick={() => {
+                              setMobileMenuOpen(false);
+                              location !== item.href && (window.location.href = item.href);
+                            }}
+                          >
+                            {item.icon}
+                            {item.title}
+                          </div>
                         </li>
                       ))}
                     </ul>

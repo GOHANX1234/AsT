@@ -94,7 +94,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   <Menu className="h-5 w-5 text-purple-400" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="w-[280px] p-0 bg-background/95 backdrop-blur-md border-r border-purple-500/20">
+              <SheetContent side="left" className="w-[280px] p-0 bg-background/95 backdrop-blur-md border-r border-purple-500/20 z-[100]">
                 <div className="flex flex-col h-full">
                   <div className="flex items-center justify-between py-4 px-5 border-b border-border">
                     <div className="flex items-center">
@@ -137,7 +137,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                             }`}
                             onClick={() => {
                               setMobileMenuOpen(false);
-                              window.location.href = item.href;
+                              location !== item.href && (window.location.href = item.href);
                             }}
                           >
                             {item.icon}

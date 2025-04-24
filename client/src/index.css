@@ -478,3 +478,11 @@ h1, h2, h3, h4, h5, h6, p, span, div, button, a, label, input,
   }
 }
 
+/* Fix for dropdown menus and sheet positioning */
+.fixed, [cmdk-overlay], [data-radix-popper-content-wrapper], 
+[data-state="open"][role="dialog"], [data-state="open"][role="alertdialog"],
+.radix-dropdown-menu-content, .radix-popover-content, .radix-tooltip-content {
+  z-index: 100 !important;
+  position: fixed !important;
+}
+
