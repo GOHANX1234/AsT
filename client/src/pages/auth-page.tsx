@@ -114,8 +114,8 @@ export default function AuthPage() {
         {/* Left Column - Form */}
         <div className="bg-black/80 backdrop-blur-md p-8 rounded-l-xl border border-purple-500/20">
           <div className="flex items-center mb-10 justify-center sm:justify-start">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-purple-500 to-indigo-500 bg-clip-text text-transparent glow-text">AestrialHack</h1>
-            <span className="ml-3 px-3 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-md border border-purple-500/30">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-purple-500 to-indigo-500 bg-clip-text text-transparent glow-text stable-text">AestrialHack</h1>
+            <span className="ml-3 px-3 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-md border border-purple-500/30 stable-text">
               License System
             </span>
           </div>
@@ -134,8 +134,8 @@ export default function AuthPage() {
             <TabsContent value="login">
               <Card className="border-purple-500/20 bg-black/60 shadow-xl shadow-purple-900/10 form-border-glow rounded-lg">
                 <CardHeader className="space-y-1">
-                  <CardTitle className="text-2xl font-bold text-white">Welcome Back</CardTitle>
-                  <CardDescription className="text-gray-400">Login to manage your license keys</CardDescription>
+                  <CardTitle className="text-2xl font-bold text-white stable-text">Welcome Back</CardTitle>
+                  <CardDescription className="text-gray-400 stable-text">Login to manage your license keys</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Form {...loginForm}>
@@ -254,8 +254,8 @@ export default function AuthPage() {
             <TabsContent value="register">
               <Card className="border-purple-500/20 bg-black/60 shadow-xl shadow-purple-900/10 form-border-glow rounded-lg">
                 <CardHeader className="space-y-1">
-                  <CardTitle className="text-2xl font-bold text-white">Create Account</CardTitle>
-                  <CardDescription className="text-gray-400">Register as a reseller using your referral token</CardDescription>
+                  <CardTitle className="text-2xl font-bold text-white stable-text">Create Account</CardTitle>
+                  <CardDescription className="text-gray-400 stable-text">Register as a reseller using your referral token</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Form {...registerForm}>

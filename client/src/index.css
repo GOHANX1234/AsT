@@ -401,7 +401,7 @@ html {
     linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  animation: input-border-animation 3s linear infinite;
+  animation: input-border-animation 6s linear infinite;
 }
 
 @keyframes input-border-animation {
@@ -410,7 +410,21 @@ html {
 }
 
 /* Ensure text isn't moving */
-.card-title, .card-description, p, h1, h2, h3, h4 {
+.card-title, .card-description, p, h1, h2, h3, h4, button, label, a, span, div {
   transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.stable-text {
+  position: relative; 
+  will-change: transform;
+  transform: translateZ(0); 
+  backface-visibility: hidden;
+  translate: none;
+  rotate: none;
+  scale: none;
 }
 
