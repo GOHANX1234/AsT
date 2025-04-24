@@ -478,28 +478,60 @@ h1, h2, h3, h4, h5, h6, p, span, div, button, a, label, input,
   }
 }
 
-/* Fix for dropdown menus and sheet positioning */
-.fixed, [cmdk-overlay], [data-radix-popper-content-wrapper], 
-[data-state="open"][role="dialog"], [data-state="open"][role="alertdialog"],
-.radix-dropdown-menu-content, .radix-popover-content, .radix-tooltip-content {
-  z-index: 100 !important;
-  position: fixed !important;
+/* CRITICAL MOBILE DROPDOWN FIXES */
+/* Force fixed positioning on all popover content */
+@media (max-width: 768px) {
+  [data-radix-popper-content-wrapper] {
+    position: fixed !important;
+    top: 30% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 99999 !important;
+    width: 94vw !important;
+    max-width: 94vw !important;
+    max-height: 60vh !important;
+    overflow-y: auto !important;
+  }
+  
+  /* Mobile select positioning fix */
+  [data-radix-select-content] {
+    position: fixed !important;
+    top: 30% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 94vw !important;
+    max-width: 94vw !important;
+    z-index: 99999 !important;
+    max-height: 60vh !important;
+  }
+  
+  /* Larger touch targets for all dropdown/select items */
+  [data-radix-select-item],
+  [role="menuitem"] {
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 12px 8px 12px 30px !important;
+  }
+  
+  /* Text truncation for long items */
+  [data-radix-select-item-text] {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 85vw !important;
+  }
 }
 
-/* Fix Select component on mobile */
-[data-radix-select-content] {
+/* Mobile dialog fixes */
+[data-state="open"][role="dialog"],
+[data-state="open"][role="alertdialog"] {
   position: fixed !important;
-  max-width: 90vw !important;
-  width: var(--radix-select-trigger-width);
-  z-index: 200 !important;
-  top: var(--radix-select-content-available-height) !important;
+  z-index: 99999 !important;
 }
 
-/* Adjust SelectItem text for truncation on mobile */
-[data-radix-select-item] span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 85vw;
+/* Fix dialog overlay */
+[role="dialog"] > [data-state="open"] {
+  z-index: 99998 !important;
 }
 
